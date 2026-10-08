@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNIT 3: MUSIC - TEST 2</title>
+<style>
+:root{
+  --red:#c92532; --red2:#8f1824; --coral:#ef6a72; --soft:#fff3f3; --cream:#fffafa;
+  --ink:#17212b; --blue:#244d78; --line:#e7b5ba; --correct:#e1f6e8; --correct-b:#3d9d65;
+  --wrong:#ffe2e4; --wrong-b:#d95d68; --shadow:0 12px 28px rgba(128,30,42,.13);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:"Nunito","Trebuchet MS",Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 8%,rgba(255,206,210,.45) 0 6%,transparent 18%),
+    radial-gradient(circle at 88% 14%,rgba(255,226,226,.7) 0 7%,transparent 20%),
+    linear-gradient(155deg,#fff 0%,#fff7f7 44%,#fff 100%);
+  min-height:100vh;
+}
+button,input{font:inherit}
+.bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.float{position:absolute;font-size:30px;opacity:.23;filter:drop-shadow(0 4px 8px rgba(155,30,45,.15));animation:drift 30s linear infinite;white-space:nowrap}
+.float.rev{animation-name:driftRev}
+@keyframes drift{from{transform:translateX(-15vw)}to{transform:translateX(115vw)}}
+@keyframes driftRev{from{transform:translateX(115vw) scaleX(-1)}to{transform:translateX(-15vw) scaleX(-1)}}
+.bubble{position:absolute;border:1.5px solid rgba(201,37,50,.16);border-radius:50%;background:rgba(255,255,255,.42);animation:rise 15s linear infinite}
+@keyframes rise{from{transform:translateY(110vh)}to{transform:translateY(-20vh)}}
+.shell{position:relative;z-index:2;max-width:1500px;margin:auto;padding:14px}
+header{
+  background:linear-gradient(135deg,#ffffffef,#fff1f1ef,#fffdfdef);
+  border:1px solid #e6b0b6;border-radius:18px;padding:14px 18px;box-shadow:var(--shadow);
+  display:grid;grid-template-columns:1fr;gap:10px;align-items:center;text-align:center;
+}
+header h1{margin:0;color:var(--red2);font-size:clamp(22px,3vw,28px);letter-spacing:.4px;text-align:center}
+header h2{margin:2px 0 0;font-size:clamp(17px,2.2vw,21px);color:#2b3e50}
+.meta{font-size:13px;line-height:1.55;color:#6e565a;text-align:center}
+.header-actions{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+.pill{border:1px solid #e3a8af;background:#fff;border-radius:999px;padding:8px 12px;color:#8b2130;font-weight:900;cursor:pointer}
+.pill:hover{background:#fff0f1}
+.identity{margin:12px 0;background:#ffffffea;border:1px solid #e8bcc1;border-radius:14px;padding:10px 12px;display:grid;grid-template-columns:1fr 180px auto;gap:10px;align-items:end}
+.identity label{font-size:12px;font-weight:900;color:#765b60;display:block;margin-bottom:4px}
+.identity input,.vocab-input{width:100%;border:1px solid #dfbfc3;border-radius:10px;padding:9px 10px;background:#fff;outline:none;color:#1d2731}
+.identity input:focus,.vocab-input:focus{border-color:#ce5260;box-shadow:0 0 0 3px rgba(206,82,96,.13)}
+.stats{position:sticky;top:6px;z-index:12;background:linear-gradient(90deg,#9e1f2d,#ca3442,#a52633);color:#fff;border-radius:15px;padding:10px 12px;box-shadow:0 8px 24px rgba(99,16,27,.22);display:grid;grid-template-columns:repeat(6,minmax(80px,1fr));gap:8px;margin:10px 0;backdrop-filter:blur(8px)}
+.stat{text-align:center;font-size:11px} .stat b{display:block;font-size:17px}
+.progressbar{grid-column:1/-1;height:7px;background:rgba(255,255,255,.28);border-radius:999px;overflow:hidden} .progressbar i{display:block;height:100%;width:0;background:#ffd6d9;border-radius:999px;transition:width .3s}
+.tabs{display:flex;gap:7px;overflow:auto;padding:3px 1px 10px}
+.tab{border:1px solid #e0aab1;background:#ffffffea;color:#8b2733;border-radius:999px;padding:8px 12px;font-weight:900;white-space:nowrap;cursor:pointer}
+.tab.active{background:linear-gradient(90deg,#a91f2c,#d34652);color:#fff;border-color:transparent}
+.section{display:none} .section.active{display:block}
+.split{display:grid;grid-template-columns:minmax(420px,48%) 1fr;gap:14px;align-items:start}
+.passage{position:sticky;top:110px;max-height:calc(100vh - 125px);overflow:auto;background:#fff;border:1px solid #ddb9bd;border-radius:18px;padding:18px;box-shadow:var(--shadow);line-height:1.62;color:#111}
+.passage h2{text-align:center;font-family:Georgia,serif;font-size:20px;margin:4px 0 8px;color:#7d1d29}
+.passage h3{font-family:Georgia,serif;margin:9px 0 3px;color:#7d1d29}
+.passage p,.passage li{font-family:Georgia,"Times New Roman",serif;font-size:17px;color:#111}
+.source-note{text-align:right;font-size:14px!important;color:#334!important}
+.paper-instruction{font-family:Georgia,"Times New Roman",serif;font-weight:700;background:linear-gradient(90deg,#861c27,#b32735);color:#fff;margin:-18px -18px 15px;padding:12px 15px;border-radius:17px 17px 0 0;line-height:1.3}
+.questions{display:flex;flex-direction:column;gap:12px}
+.qcard{background:#ffffffed;border:1px solid #e2b8bd;border-radius:18px;padding:16px;box-shadow:var(--shadow);scroll-margin-top:115px}
+.qhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}
+.qnum{font-weight:900;color:#7e1d28;font-size:17px;line-height:1.42}
+.qbadge{font-size:11px;background:#fff0f1;color:#8c2531;padding:5px 8px;border-radius:999px;white-space:nowrap}
+.options{display:grid;gap:8px}
+.option{width:100%;text-align:left;border:1px solid #e4c1c5;background:#fffafa;border-radius:13px;padding:11px 12px;cursor:pointer;transition:.15s;display:flex;gap:10px;align-items:flex-start;color:#1c2731;line-height:1.42}
+.option:hover:not(:disabled){transform:translateY(-1px);border-color:#cf6974;box-shadow:0 6px 14px rgba(173,46,60,.10)}
+.option:focus-visible{outline:3px solid #d96c77;outline-offset:2px}
+.option .letter{font-weight:900;color:#c02e3b;min-width:22px}
+.option.correct{background:var(--correct);border-color:var(--correct-b)} .option.correct .letter{color:#247548}
+.option.wrong{background:var(--wrong);border-color:var(--wrong-b)} .option.wrong .letter{color:#a9323e}
+.option.strike .txt{text-decoration:line-through;text-decoration-thickness:2px;opacity:.62}
+.state-tag{margin-left:auto;font-size:11px;font-weight:900}
+.feedback{display:none;margin-top:10px;border-radius:12px;padding:10px 12px;font-weight:900}
+.feedback.good{display:block;background:var(--correct);color:#176d41}
+.feedback.bad{display:block;background:var(--wrong);color:#a0343f}
+.explain{display:none;margin-top:10px;background:linear-gradient(135deg,#fff7f7,#fffdfd,#fff3f3);border:1px solid #e6c2c6;border-radius:14px;padding:13px;line-height:1.5;color:#202a33}
+.explain.open{display:block}
+.explain h4{margin:0 0 9px;color:#861e2a}
+.ex-step{background:#fff;border-radius:10px;padding:9px 10px;margin:7px 0;border:1px solid #f2dfe1} .ex-step ul{margin:6px 0;padding-left:20px} .ex-step li{margin:5px 0}
+.answer-line{margin-top:9px;background:#e3f7ea;border-left:4px solid #3da168;padding:9px 10px;border-radius:8px;font-weight:900;color:#1c7046}
+.qactions{display:none;gap:8px;flex-wrap:wrap;margin-top:10px} .qactions.show{display:flex}
+.smallbtn{border:1px solid #dfadb3;background:#fff;color:#8b2531;border-radius:10px;padding:8px 10px;font-weight:900;cursor:pointer}
+.smallbtn.primary{background:linear-gradient(90deg,#a8202d,#d34551);color:#fff;border-color:transparent}
+.vocab{background:#fff;border:1px solid #e0b3b9;border-radius:18px;box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+.vocab h3{margin:0 0 5px;color:#8b1f2b} .vocab .hint{font-size:12px;color:#7b686b;margin-bottom:10px}
+.vgrid{display:grid;grid-template-columns:1fr 1.25fr;border:1px solid #e3c3c7;border-radius:12px;overflow:hidden}
+.vrow{display:contents} .vcell{padding:8px 10px;border-bottom:1px solid #f0dfe1;background:#fffafa} .vcell:nth-child(2n){border-left:1px solid #f0dfe1;background:#fff}
+.vword{font-weight:900} .pos{font-size:11px;color:#8b777a}
+.arr-layout{display:grid;grid-template-columns:280px 1fr;gap:14px}
+.arr-guide{position:sticky;top:110px;background:linear-gradient(150deg,#fff,#fff1f2,#fff);border:1px solid #e2b5ba;border-radius:18px;padding:16px;box-shadow:var(--shadow);line-height:1.5}
+.arr-guide h3{margin-top:0;color:#8c202c}
+.arrange-bank{background:#fff;border:1px solid #ead0d3;border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.arrange-bank p{font-family:Georgia,"Times New Roman",serif;margin:6px 0;line-height:1.45;color:#111}
+.insert-sentence{display:block;margin:7px 0;padding:9px;background:#fff0f1;border-radius:9px;font-family:Georgia,serif;color:#111}
+.footer-tools{margin:18px 0 8px;background:#ffffffea;border:1px solid #e2b8bd;border-radius:18px;padding:14px;box-shadow:var(--shadow);display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.submitbox{display:none;margin-top:12px;background:linear-gradient(135deg,#fff,#fff2f3,#fff);border:1px solid #dfb7bc;border-radius:16px;padding:16px;text-align:center}
+.submitbox.show{display:block}
+.scorebig{font-size:30px;font-weight:900;color:#9c2230}
+.note{font-size:12px;color:#79676a}
+.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.confetti{position:fixed;width:9px;height:13px;border-radius:2px;z-index:99;pointer-events:none;animation:confetti .9s ease-out forwards}
+@keyframes confetti{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(720deg);opacity:0}}
+@media(max-width:900px){.split,.arr-layout{grid-template-columns:1fr}.passage,.arr-guide{position:relative;top:auto;max-height:none}.stats{grid-template-columns:repeat(3,1fr)}.identity{grid-template-columns:1fr 1fr}.identity>button{grid-column:1/-1}}
+@media(max-width:560px){.shell{padding:8px}.stats{font-size:10px}.stat b{font-size:14px}.qcard{padding:12px}.passage p{font-size:16px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.bg{display:none}}
+@media print{body{background:#fff;color:#000}.bg,.header-actions,.stats,.tabs,.qactions,.footer-tools,.identity button{display:none!important}.shell{max-width:none;padding:0}header,.identity,.qcard,.passage,.vocab,.arr-guide{box-shadow:none;border:1px solid #aaa;background:#fff}.section{display:block!important}.split,.arr-layout{display:block}.passage{position:relative;max-height:none;margin-bottom:10px}.qcard{break-inside:avoid}.explain{background:#fff}}
+</style>
+
+<style id="unit2-test2-green-theme">
+:root{
+  --red:#2e8b57;
+  --red2:#17663d;
+  --coral:#69bd89;
+  --soft:#effaf2;
+  --cream:#fbfffc;
+  --ink:#17251d;
+  --blue:#235f43;
+  --line:#acd7b9;
+  --correct:#dff6e7;
+  --correct-b:#3c9b62;
+  --wrong:#ffe5e7;
+  --wrong-b:#d65f69;
+  --shadow:0 12px 30px rgba(27,105,63,.14);
+}
+body{
+  color:#16241c;
+  background:
+    radial-gradient(circle at 10% 8%,rgba(176,235,193,.40) 0 7%,transparent 20%),
+    radial-gradient(circle at 90% 15%,rgba(219,247,226,.75) 0 8%,transparent 23%),
+    linear-gradient(150deg,#f8fff9 0%,#ecf9ef 47%,#ffffff 100%);
+}
+.float{opacity:.30;filter:drop-shadow(0 4px 8px rgba(32,111,67,.15))}
+.bubble{border-color:rgba(39,139,83,.18);background:rgba(255,255,255,.50)}
+header{
+  background:linear-gradient(135deg,#ffffffef,#eaf8edef,#fafffbef);
+  border-color:#a9d5b7;
+  box-shadow:var(--shadow);
+}
+header h1{color:#175d38}
+header h2{color:#2e7a50}
+.meta{color:#557060}
+.pill{
+  border-color:#9bcbae;
+  color:#1f6b43;
+}
+.pill:hover{background:#eaf8ef}
+.identity{border-color:#b5d9bf;background:#ffffffef}
+.identity label{color:#577162}
+.identity input,.vocab-input{border-color:#b8d9c2}
+.identity input:focus,.vocab-input:focus{
+  border-color:#4ea773;
+  box-shadow:0 0 0 3px rgba(78,167,115,.14);
+}
+.stats{
+  background:linear-gradient(90deg,#1e6f45,#2f925b,#267b4e);
+  box-shadow:0 8px 24px rgba(24,96,58,.24);
+}
+.progressbar i{background:#c8f0d5}
+.tab{
+  border-color:#a7d1b4;
+  color:#246c47;
+}
+.tab.active{
+  background:linear-gradient(90deg,#23764a,#3d9c64);
+}
+.passage{
+  border-color:#b7d7c1;
+  box-shadow:var(--shadow);
+  background:#ffffff;
+}
+.passage h2,.passage h3{color:#225f40}
+.paper-instruction{
+  background:linear-gradient(90deg,#17623d,#2d8554);
+}
+.qcard{
+  border-color:#b8d8c1;
+  box-shadow:var(--shadow);
+}
+.qnum{color:#1e653f}
+.qbadge{background:#e8f7ed;color:#216c44}
+.option{
+  border-color:#c4dfcb;
+  background:linear-gradient(90deg,#ffffff,#f8fff9);
+}
+.option:hover:not(:disabled){
+  border-color:#62ad7d;
+  box-shadow:0 6px 14px rgba(46,139,87,.10);
+}
+.option:focus-visible{outline-color:#5dae7a}
+.option .letter{color:#2b8a57}
+.explain{
+  background:linear-gradient(135deg,#f6fff8,#ffffff,#eef9f1);
+  border-color:#c4dfcb;
+}
+.explain h4{color:#1f6942}
+.ex-step{border-color:#dceee2}
+.smallbtn{border-color:#a9d1b5;color:#216a44}
+.smallbtn.primary{
+  background:linear-gradient(90deg,#24764a,#3e9a64);
+}
+.vocab{
+  border-color:#b8d9c2;
+  background:#fff;
+}
+.vocab h3{color:#20683f}
+.vgrid{border-color:#c2ddca}
+.vcell{border-color:#e0eee4;background:#f7fff9}
+.vcell:nth-child(2n){border-color:#e0eee4;background:#fff}
+.arr-guide{
+  background:linear-gradient(150deg,#ffffff,#eef9f1,#ffffff);
+  border-color:#b5d8bf;
+}
+.arr-guide h3{color:#226a43}
+.arrange-bank{border-color:#d0e6d6}
+.insert-sentence{background:#e8f7ed}
+.footer-tools{border-color:#b7d8c1}
+.submitbox{
+  background:linear-gradient(135deg,#ffffff,#edf9f1,#ffffff);
+  border-color:#b4d7bf;
+}
+.scorebig{color:#217047}
+</style>
+
+
+<style id="unit2-test3-babypink-dark-theme">
+:root{
+  --red:#f3a9c2;
+  --red2:#ffd0df;
+  --coral:#f7b9ce;
+  --soft:#2b2130;
+  --cream:#fff8fb;
+  --ink:#f7edf3;
+  --blue:#e8c0d0;
+  --line:#765768;
+  --correct:#203e34;
+  --correct-b:#6dc59a;
+  --wrong:#4b2935;
+  --wrong-b:#ef8ca8;
+  --shadow:0 14px 34px rgba(0,0,0,.38);
+}
+html{color-scheme:dark}
+body{
+  color:#f8edf3;
+  background:
+    radial-gradient(circle at 10% 8%,rgba(246,171,198,.16) 0 8%,transparent 24%),
+    radial-gradient(circle at 90% 15%,rgba(181,118,153,.12) 0 9%,transparent 24%),
+    radial-gradient(circle at 50% 90%,rgba(244,191,212,.10) 0 8%,transparent 28%),
+    linear-gradient(155deg,#141017 0%,#211720 46%,#17131a 100%);
+}
+.float{opacity:.40;filter:drop-shadow(0 4px 12px rgba(246,170,198,.22))}
+.bubble{border-color:rgba(248,183,207,.20);background:rgba(255,220,234,.035)}
+header{
+  background:linear-gradient(135deg,rgba(36,26,36,.98),rgba(54,32,45,.97),rgba(35,27,39,.98));
+  border-color:#765469;
+  box-shadow:var(--shadow);
+}
+header h1{color:#ffd8e5;text-shadow:0 2px 18px rgba(255,185,211,.18)}
+header h2{color:#f4aec8}
+.meta{color:#d7bec8}
+.header-actions{justify-content:center}
+.pill{
+  border-color:#815c70;
+  background:#2d222e;
+  color:#ffd9e6;
+}
+.pill:hover{background:#432e3b;border-color:#b27a93}
+.identity{
+  background:rgba(39,29,40,.96);
+  border-color:#725468;
+}
+.identity label{color:#d7bcca}
+.identity input,.vocab-input{
+  background:#fffafd;
+  border-color:#d9afbf;
+  color:#23171d;
+}
+.identity input::placeholder,.vocab-input::placeholder{color:#967c88}
+.identity input:focus,.vocab-input:focus{
+  border-color:#ee9fbd;
+  box-shadow:0 0 0 3px rgba(238,159,189,.17);
+}
+.stats{
+  background:linear-gradient(90deg,#6c3c54,#9a506c,#6c4059);
+  color:#fff8fb;
+  box-shadow:0 10px 28px rgba(0,0,0,.36);
+}
+.progressbar{background:rgba(255,255,255,.13)}
+.progressbar i{background:linear-gradient(90deg,#ffd4e2,#f3abc5,#ffe0ea)}
+.tab{
+  border-color:#795b6c;
+  background:#2a212b;
+  color:#ebcfda;
+}
+.tab:hover{background:#3b2b38}
+.tab.active{
+  background:linear-gradient(90deg,#8a4964,#bc6684);
+  color:#fff;
+  border-color:transparent;
+}
+
+/* Reading paper: deliberately light + black text for long-reading comfort. */
+.passage{
+  background:linear-gradient(165deg,#fffafd,#fff5f9)!important;
+  border-color:#d9afbf!important;
+  color:#151217!important;
+  box-shadow:var(--shadow);
+}
+.passage h2,.passage h3{
+  color:#71364f!important;
+}
+.passage p,.passage li,.passage b,.passage strong,.passage u,.passage span{
+  color:#151217!important;
+}
+.passage .source-note{color:#44323a!important}
+.paper-instruction{
+  background:linear-gradient(90deg,#5d3348,#8b4863)!important;
+  color:#fff!important;
+}
+.paper-instruction *{color:#fff!important}
+
+/* Question cards: dark panels with very high contrast. */
+.qcard{
+  background:linear-gradient(145deg,rgba(44,33,45,.98),rgba(50,34,46,.98));
+  border-color:#735567;
+  box-shadow:var(--shadow);
+}
+.qnum{color:#ffe2eb}
+.qbadge{
+  background:#523848;
+  color:#ffd5e3;
+}
+.options{gap:9px}
+.option{
+  border-color:#6f5363;
+  background:linear-gradient(90deg,#342835,#3a2934);
+  color:#fff7fa;
+}
+.option:hover:not(:disabled){
+  border-color:#e39bb6;
+  box-shadow:0 7px 18px rgba(235,148,182,.14);
+}
+.option:focus-visible{outline-color:#f1aac4}
+.option .letter{color:#f8b5ce}
+.option.correct{
+  background:linear-gradient(90deg,#203c33,#21463a);
+  border-color:#68bf95;
+}
+.option.correct .letter{color:#a8e6c7}
+.option.wrong{
+  background:linear-gradient(90deg,#4d2937,#482431);
+  border-color:#df7898;
+}
+.option.wrong .letter{color:#ffb3c8}
+.feedback.good{background:#203d34;color:#b7efd4}
+.feedback.bad{background:#4c2936;color:#ffc0d1}
+.explain{
+  background:linear-gradient(145deg,#fff7fb,#fff,#fff2f7);
+  border-color:#ddb8c6;
+  color:#22161d;
+}
+.explain h4{color:#79364f}
+.ex-step{
+  background:#fff;
+  border-color:#f0d9e2;
+  color:#24181e;
+}
+.ex-step p,.ex-step li,.ex-step b,.ex-step i{color:#24181e}
+.answer-line{
+  background:#e2f6e9;
+  border-left-color:#5bb985;
+  color:#176b43;
+}
+.smallbtn{
+  border-color:#7c5c6e;
+  background:#342836;
+  color:#ffe0ea;
+}
+.smallbtn.primary{
+  background:linear-gradient(90deg,#99516d,#c56c8b);
+  color:#fff;
+}
+
+/* Vocab sheet stays light to make handwriting/typing easy. */
+.vocab{
+  background:linear-gradient(145deg,#fffafd,#fff5f9);
+  border-color:#d8afbf;
+  color:#21161c;
+}
+.vocab h3{color:#79364f}
+.vocab .hint{color:#705a64}
+.vgrid{border-color:#dfc3ce}
+.vcell{background:#fff8fb;border-color:#f0dde4;color:#21161c}
+.vcell:nth-child(2n){background:#fff;border-color:#f0dde4}
+.vword{color:#2a1821}
+.pos{color:#8a707b}
+
+/* Arrangement guidance dark, utterance bank light for easy reading. */
+.arr-guide{
+  background:linear-gradient(150deg,#332634,#472e3e,#2f2632);
+  border-color:#745768;
+  color:#f7eaf0;
+}
+.arr-guide h3{color:#ffd0df}
+.arr-guide .note{color:#cfb4c0}
+.arrange-bank{
+  background:#fffafd;
+  border-color:#dcb7c5;
+}
+.arrange-bank p,.arrange-bank b{
+  color:#171217!important;
+}
+.insert-sentence{
+  background:#ffe8f1!important;
+  color:#21151b!important;
+}
+.footer-tools{
+  background:rgba(42,31,43,.96);
+  border-color:#705365;
+}
+.submitbox{
+  background:linear-gradient(135deg,#352735,#4a3040,#352836);
+  border-color:#765669;
+  color:#fff3f8;
+}
+.scorebig{color:#ffc9dc}
+.note{color:#cfb7c1}
+
+/* Keep all content readable on smaller screens. */
+@media(max-width:900px){
+  .passage{font-size:16px}
+}
+@media print{
+  html{color-scheme:light}
+  body{background:#fff!important;color:#000!important}
+  .qcard,.arr-guide,.footer-tools,.submitbox{
+    background:#fff!important;color:#000!important;border-color:#aaa!important;
+  }
+  .qnum,.arr-guide h3,.note{color:#000!important}
+  .option{background:#fff!important;color:#000!important;border-color:#aaa!important}
+}
+</style>
+
+
+<style id="unit3-music-test1-silver-dark-theme">
+:root{
+  --red:#c7ccd3;
+  --red2:#edf0f3;
+  --coral:#aeb5be;
+  --soft:#282c31;
+  --cream:#fafbfc;
+  --ink:#f4f6f8;
+  --blue:#d8dde3;
+  --line:#626a74;
+  --correct:#203b32;
+  --correct-b:#6ec297;
+  --wrong:#482b32;
+  --wrong-b:#e3889b;
+  --shadow:0 15px 38px rgba(0,0,0,.43);
+}
+html{color-scheme:dark}
+body{
+  color:#f3f5f7;
+  background:
+    radial-gradient(circle at 10% 8%,rgba(213,219,226,.12) 0 8%,transparent 24%),
+    radial-gradient(circle at 90% 15%,rgba(166,176,187,.10) 0 9%,transparent 25%),
+    radial-gradient(circle at 46% 88%,rgba(222,226,231,.07) 0 8%,transparent 29%),
+    linear-gradient(155deg,#111316 0%,#1a1e22 47%,#111316 100%);
+}
+.float{
+  opacity:.38;
+  filter:grayscale(.2) drop-shadow(0 5px 12px rgba(220,225,230,.15));
+}
+.bubble{
+  border-color:rgba(205,213,220,.18);
+  background:rgba(240,243,246,.025);
+}
+header{
+  background:linear-gradient(135deg,rgba(35,39,44,.98),rgba(53,58,64,.96),rgba(31,34,39,.98));
+  border-color:#707782;
+  box-shadow:var(--shadow);
+}
+header h1{
+  color:#f1f3f5;
+  text-shadow:0 2px 18px rgba(225,230,236,.16);
+}
+header h2{color:#cfd5db}
+.meta{color:#c0c6cc}
+.header-actions{justify-content:center}
+.pill{
+  border-color:#727a84;
+  background:#292e34;
+  color:#eef1f4;
+}
+.pill:hover{
+  background:#3a4047;
+  border-color:#9da5ae;
+}
+.identity{
+  background:rgba(38,42,47,.96);
+  border-color:#69717b;
+}
+.identity label{color:#c7ccd2}
+.identity input,.vocab-input{
+  background:#fbfcfd;
+  border-color:#bfc5cb;
+  color:#16191d;
+}
+.identity input::placeholder,.vocab-input::placeholder{color:#737a82}
+.identity input:focus,.vocab-input:focus{
+  border-color:#9da5ad;
+  box-shadow:0 0 0 3px rgba(190,197,204,.18);
+}
+.stats{
+  background:linear-gradient(90deg,#4b525a,#6a737d,#4b535b);
+  color:#fff;
+  box-shadow:0 10px 30px rgba(0,0,0,.40);
+}
+.progressbar{background:rgba(255,255,255,.12)}
+.progressbar i{background:linear-gradient(90deg,#f0f2f4,#bfc6cd,#e6e9ec)}
+.tab{
+  border-color:#626a74;
+  background:#252a30;
+  color:#d8dde2;
+}
+.tab:hover{background:#343a41}
+.tab.active{
+  background:linear-gradient(90deg,#59616a,#7c858f);
+  color:#fff;
+  border-color:transparent;
+}
+
+/* LONG READING PAPER: light silver, black text, maximum contrast */
+.passage{
+  background:linear-gradient(165deg,#f7f8fa,#eceff2)!important;
+  border-color:#aeb5bd!important;
+  color:#111417!important;
+  box-shadow:var(--shadow);
+}
+.passage h2,.passage h3{
+  color:#343a42!important;
+}
+.passage p,.passage li,.passage b,.passage strong,.passage u,.passage span,.passage i{
+  color:#111417!important;
+}
+.passage .source-note{color:#3e454d!important}
+.paper-instruction{
+  background:linear-gradient(90deg,#363d45,#5c6570)!important;
+  color:#fff!important;
+}
+.paper-instruction *{color:#fff!important}
+
+/* DARK QUESTION CARDS */
+.qcard{
+  background:linear-gradient(145deg,rgba(42,46,52,.985),rgba(33,37,42,.985));
+  border-color:#626a74;
+  box-shadow:var(--shadow);
+}
+.qnum{color:#f6f7f8}
+.qbadge{
+  background:#454c54;
+  color:#edf0f3;
+}
+.options{gap:9px}
+.option{
+  border-color:#5d6570;
+  background:linear-gradient(90deg,#2a2f35,#31363d);
+  color:#f7f8fa;
+}
+.option:hover:not(:disabled){
+  border-color:#a8afb7;
+  box-shadow:0 7px 20px rgba(210,216,222,.10);
+}
+.option:focus-visible{outline-color:#c7cdd3}
+.option .letter{color:#d9dee3}
+.option.correct{
+  background:linear-gradient(90deg,#203b32,#224238);
+  border-color:#66b98e;
+}
+.option.correct .letter{color:#a8e2c5}
+.option.wrong{
+  background:linear-gradient(90deg,#482a32,#40252c);
+  border-color:#db7f93;
+}
+.option.wrong .letter{color:#ffb4c3}
+.feedback.good{background:#203b32;color:#b9efd5}
+.feedback.bad{background:#472a32;color:#ffc1cf}
+
+/* EXPLANATIONS: light panel for long Vietnamese explanations */
+.explain{
+  background:linear-gradient(145deg,#f7f8fa,#ffffff,#eef1f4);
+  border-color:#b8bec5;
+  color:#171a1e;
+}
+.explain h4{color:#343a42}
+.ex-step{
+  background:#fff;
+  border-color:#dfe3e7;
+  color:#171a1e;
+}
+.ex-step p,.ex-step li,.ex-step b,.ex-step i{color:#171a1e}
+.answer-line{
+  background:#e2f5e9;
+  border-left-color:#5cb684;
+  color:#176b43;
+}
+.smallbtn{
+  border-color:#69717a;
+  background:#2e343a;
+  color:#f2f4f6;
+}
+.smallbtn.primary{
+  background:linear-gradient(90deg,#626b75,#89929c);
+  color:#fff;
+}
+
+/* VOCABULARY: printable worksheet style */
+.vocab{
+  background:linear-gradient(145deg,#f7f8fa,#eceff2);
+  border-color:#afb6be;
+  color:#171a1e;
+}
+.vocab h3{color:#343a42}
+.vocab .hint{color:#59616a}
+.vgrid{border-color:#c5cbd1}
+.vcell{
+  background:#f4f6f8;
+  border-color:#dfe3e7;
+  color:#171a1e;
+}
+.vcell:nth-child(2n){
+  background:#fff;
+  border-color:#dfe3e7;
+}
+.vword{color:#15181b}
+.pos{color:#70777f}
+
+/* ARRANGEMENT: guide dark, source sentences light */
+.arr-guide{
+  background:linear-gradient(150deg,#30353b,#454c54,#2d3238);
+  border-color:#656d76;
+  color:#f1f3f5;
+}
+.arr-guide h3{color:#f4f5f6}
+.arr-guide .note{color:#c7ccd2}
+.arrange-bank{
+  background:#f5f7f9;
+  border-color:#b8bec5;
+}
+.arrange-bank p,.arrange-bank b{
+  color:#14171a!important;
+}
+.insert-sentence{
+  background:#e6e9ed!important;
+  color:#171a1e!important;
+}
+.footer-tools{
+  background:rgba(38,42,47,.96);
+  border-color:#626a73;
+}
+.submitbox{
+  background:linear-gradient(135deg,#30353b,#464d55,#30353b);
+  border-color:#6b737d;
+  color:#f5f6f7;
+}
+.scorebig{color:#e6e9ec}
+.note{color:#c2c8ce}
+
+@media(max-width:900px){
+  .passage p,.passage li{font-size:16px!important}
+}
+@media print{
+  html{color-scheme:light}
+  body{background:#fff!important;color:#000!important}
+  .qcard,.arr-guide,.footer-tools,.submitbox{
+    background:#fff!important;color:#000!important;border-color:#aaa!important;
+  }
+  .qnum,.arr-guide h3,.note{color:#000!important}
+  .option{background:#fff!important;color:#000!important;border-color:#aaa!important}
+}
+</style>
+
+
+<style id="unit3-music-test2-orangered-dark-theme">
+:root{--red:#ff8a65;--red2:#ffc2ad;--coral:#ff7043;--soft:#2f2521;--cream:#fff8f4;--ink:#f8f3f0;--blue:#ffd0bf;--line:#805b4e;--correct:#203b32;--correct-b:#6ec297;--wrong:#512a25;--wrong-b:#ef8f79;--shadow:0 15px 38px rgba(0,0,0,.43)}
+html{color-scheme:dark}
+body{color:#f8f2ef;background:radial-gradient(circle at 8% 10%,rgba(255,125,84,.16) 0 8%,transparent 24%),radial-gradient(circle at 92% 16%,rgba(255,169,128,.10) 0 9%,transparent 25%),linear-gradient(155deg,#151210 0%,#231a17 47%,#151210 100%)}
+.float{opacity:.38;filter:drop-shadow(0 5px 12px rgba(255,137,93,.18))}
+.bubble{border-color:rgba(255,161,124,.18);background:rgba(255,159,118,.025)}
+header{background:linear-gradient(135deg,rgba(42,31,27,.98),rgba(62,39,31,.96),rgba(35,28,25,.98));border-color:#8b6253;box-shadow:var(--shadow)}
+header h1{color:#ffe2d8;text-shadow:0 2px 18px rgba(255,136,95,.16)} header h2{color:#ff9f7d}.meta{color:#d7bcb2}.header-actions{justify-content:center}
+.pill{border-color:#8c6454;background:#332823;color:#ffe7df}.pill:hover{background:#49342c;border-color:#b87f69}
+.identity{background:rgba(44,33,29,.96);border-color:#7b594c}.identity label{color:#dcc3b9}
+.identity input,.vocab-input{background:#fffaf7;border-color:#d3b1a4;color:#1a1513}.identity input::placeholder,.vocab-input::placeholder{color:#8f786f}
+.stats{background:linear-gradient(90deg,#713e2e,#a95335,#753d2c);color:#fff8f4;box-shadow:0 10px 30px rgba(0,0,0,.40)}
+.progressbar{background:rgba(255,255,255,.12)}.progressbar i{background:linear-gradient(90deg,#ffd4c4,#ff9f7d,#ffe0d4)}
+.tab{border-color:#805b4d;background:#2f2622;color:#ead5cc}.tab:hover{background:#41312b}.tab.active{background:linear-gradient(90deg,#9a4c31,#d66b45);color:#fff;border-color:transparent}
+.passage{background:linear-gradient(165deg,#fffaf7,#f5ece7)!important;border-color:#d0ae9f!important;color:#14110f!important;box-shadow:var(--shadow)}
+.passage h2,.passage h3{color:#743b28!important}.passage p,.passage li,.passage b,.passage strong,.passage u,.passage span,.passage i{color:#14110f!important}
+.paper-instruction{background:linear-gradient(90deg,#6d3526,#9d5137)!important;color:#fff!important}.paper-instruction *{color:#fff!important}
+.qcard{background:linear-gradient(145deg,rgba(49,38,34,.985),rgba(39,30,27,.985));border-color:#795749;box-shadow:var(--shadow)}
+.qnum{color:#fff4ee}.qbadge{background:#593d33;color:#ffd8c9}.option{border-color:#705044;background:linear-gradient(90deg,#352a26,#3c2c27);color:#fff8f5}
+.option:hover:not(:disabled){border-color:#dc9679;box-shadow:0 7px 20px rgba(242,139,99,.13)}.option .letter{color:#ffb094}
+.option.correct{background:linear-gradient(90deg,#203b32,#224238);border-color:#66b98e}.option.correct .letter{color:#a8e2c5}
+.option.wrong{background:linear-gradient(90deg,#522d29,#472621);border-color:#e58c78}.option.wrong .letter{color:#ffb9a9}
+.feedback.good{background:#203b32;color:#b9efd5}.feedback.bad{background:#4e2b27;color:#ffc3b5}
+.explain{background:linear-gradient(145deg,#fff8f4,#fff,#f8eee9);border-color:#d8b6a8;color:#1b1512}.explain h4{color:#7a3e2b}
+.ex-step{background:#fff;border-color:#ead9d1;color:#1b1512}.ex-step p,.ex-step li,.ex-step b,.ex-step i{color:#1b1512}.answer-line{background:#e2f5e9;border-left-color:#5cb684;color:#176b43}
+.smallbtn{border-color:#7b594d;background:#352a26;color:#ffe7de}.smallbtn.primary{background:linear-gradient(90deg,#a35337,#d66f4b);color:#fff}
+.vocab{background:linear-gradient(145deg,#fff9f6,#f5ece7);border-color:#d2b0a2;color:#191411}.vocab h3{color:#7b3f2b}.vocab .hint{color:#735f57}
+.vgrid{border-color:#dbc2b7}.vcell{background:#fff7f3;border-color:#eadbd4;color:#191411}.vcell:nth-child(2n){background:#fff;border-color:#eadbd4}.vword{color:#1b1512}.pos{color:#846d63}
+.arr-guide{background:linear-gradient(150deg,#3a2d28,#54382f,#352a26);border-color:#7b594d;color:#f8ece7}.arr-guide h3{color:#ffd3c3}.arr-guide .note{color:#d9beb4}
+.arrange-bank{background:#fff9f6;border-color:#d4b2a5}.arrange-bank p,.arrange-bank b{color:#16110f!important}.insert-sentence{background:#ffe4d8!important;color:#1d1512!important}
+.footer-tools{background:rgba(45,34,30,.96);border-color:#735247}.submitbox{background:linear-gradient(135deg,#392c27,#52382f,#392c27);border-color:#805b4e;color:#fff1eb}.scorebig{color:#ffc4ae}.note{color:#d8c0b6}
+@media(max-width:900px){.passage p,.passage li{font-size:16px!important}}
+</style>
+
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+  <div class="float" style="top:9%;animation-duration:29s">🎵　🎼　🎻　🌙</div>
+  <div class="float rev" style="top:28%;animation-duration:35s;animation-delay:-10s">🎧　🎹　✨</div>
+  <div class="float" style="top:52%;animation-duration:38s;animation-delay:-18s">🎤　🥁　🎶</div>
+  <div class="float rev" style="top:73%;animation-duration:31s;animation-delay:-8s">🪕　🎺　🌟</div>
+  <div class="float" style="top:89%;animation-duration:36s;animation-delay:-15s">🎼　🎵　🩶</div>
+  <span class="bubble" style="left:0%;width:11px;height:11px;animation-delay:-0.0s;animation-duration:11s"></span><span class="bubble" style="left:11%;width:16px;height:16px;animation-delay:-1.2s;animation-duration:13s"></span><span class="bubble" style="left:22%;width:21px;height:21px;animation-delay:-2.4s;animation-duration:15s"></span><span class="bubble" style="left:33%;width:26px;height:26px;animation-delay:-3.5999999999999996s;animation-duration:17s"></span><span class="bubble" style="left:44%;width:31px;height:31px;animation-delay:-4.8s;animation-duration:19s"></span><span class="bubble" style="left:55%;width:11px;height:11px;animation-delay:-6.0s;animation-duration:11s"></span><span class="bubble" style="left:66%;width:16px;height:16px;animation-delay:-7.199999999999999s;animation-duration:13s"></span><span class="bubble" style="left:77%;width:21px;height:21px;animation-delay:-8.4s;animation-duration:15s"></span><span class="bubble" style="left:88%;width:26px;height:26px;animation-delay:-9.6s;animation-duration:17s"></span><span class="bubble" style="left:3%;width:31px;height:31px;animation-delay:-10.799999999999999s;animation-duration:19s"></span><span class="bubble" style="left:14%;width:11px;height:11px;animation-delay:-12.0s;animation-duration:11s"></span><span class="bubble" style="left:25%;width:16px;height:16px;animation-delay:-13.2s;animation-duration:13s"></span><span class="bubble" style="left:36%;width:21px;height:21px;animation-delay:-14.399999999999999s;animation-duration:15s"></span><span class="bubble" style="left:47%;width:26px;height:26px;animation-delay:-15.6s;animation-duration:17s"></span><span class="bubble" style="left:58%;width:31px;height:31px;animation-delay:-16.8s;animation-duration:19s"></span><span class="bubble" style="left:69%;width:11px;height:11px;animation-delay:-18.0s;animation-duration:11s"></span><span class="bubble" style="left:80%;width:16px;height:16px;animation-delay:-19.2s;animation-duration:13s"></span><span class="bubble" style="left:91%;width:21px;height:21px;animation-delay:-20.4s;animation-duration:15s"></span><span class="bubble" style="left:6%;width:26px;height:26px;animation-delay:-21.599999999999998s;animation-duration:17s"></span><span class="bubble" style="left:17%;width:31px;height:31px;animation-delay:-22.8s;animation-duration:19s"></span>
+</div>
+
+<div class="shell">
+<header>
+  <div>
+    <h1>UNIT 3: MUSIC</h1>
+    <h2>TEST 2</h2>
+    <div class="meta"><b>Created by: Ms Tuyet Mai FTU</b> • Contact: 0365 423 820<br>English Practice • 40 questions • Ember Music Night 🔥🎵🧡</div>
+  </div>
+  <div class="header-actions">
+    <button class="pill" id="soundBtn" aria-label="Bật hoặc tắt âm thanh">🔊 Âm thanh: Bật</button>
+    <button class="pill" onclick="window.print()">🖨️ In bài</button>
+  </div>
+</header>
+
+<div class="identity">
+  <div><label for="studentName">Họ và tên học sinh</label><input id="studentName" placeholder="Nhập họ và tên"></div>
+  <div><label for="studentClass">Lớp</label><input id="studentClass" placeholder="VD: 10A1"></div>
+  <button class="pill" id="saveIdentity">💾 Lưu thông tin</button>
+</div>
+
+<div class="stats" aria-live="polite">
+  <div class="stat">Tổng câu<b id="sTotal">40</b></div>
+  <div class="stat">Đã làm<b id="sDone">0</b></div>
+  <div class="stat">Chưa làm<b id="sLeft">40</b></div>
+  <div class="stat">Đúng lần đầu<b id="sCorrect">0</b></div>
+  <div class="stat">Sai lần đầu<b id="sWrong">0</b></div>
+  <div class="stat">Tỷ lệ đúng<b id="sRate">0%</b></div>
+  <div class="progressbar"><i id="progress"></i></div>
+</div>
+
+<nav class="tabs">
+  <button class="tab active" data-sec="1">1–6 Advertisement</button>
+  <button class="tab" data-sec="2">7–12 Leaflet</button>
+  <button class="tab" data-sec="3">13–17 Arrangement</button>
+  <button class="tab" data-sec="4">18–22 Cloze</button>
+  <button class="tab" data-sec="5">23–30 Reading 1</button>
+  <button class="tab" data-sec="6">31–40 Reading 2</button>
+</nav>
+
+<main id="main"></main>
+
+<div class="footer-tools">
+  <button class="pill" id="unfinishedBtn">↩️ Quay lại câu chưa làm</button>
+  <button class="pill" id="wrongBtn">❌ Xem câu đã sai</button>
+  <button class="pill" id="submitBtn">📩 Nộp bài & chấm điểm</button>
+  <button class="pill" id="resetBtn">🔄 Làm lại toàn bộ</button>
+  <button class="pill" id="clearBtn">🧹 Xóa dữ liệu đã lưu</button>
+</div>
+<div class="submitbox" id="submitBox"></div>
+</div>
+
+<script>
+const QUESTIONS=[{"n":1,"section":1,"stem":"Question 1:","options":{"A":"whose","B":"which","C":"who","D":"whom"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> <b>whose</b>: chỉ sở hữu và cần danh từ theo sau.</li><li><b>B.</b> <b>which</b>: dùng cho vật/sự việc.</li><li><b>C.</b> <b>who</b>: đại từ quan hệ chỉ người, làm chủ ngữ của <i>combine</i>.</li><li><b>D.</b> <b>whom</b>: chỉ người nhưng làm tân ngữ.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Hãy gặp những nhạc sĩ địa phương, những người kết hợp các bài hát dân gian với nhịp điệu thành thị mới mẻ.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Danh từ trước là <b>musicians</b> và chỗ trống là chủ ngữ của <b>combine</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>Cấu trúc đúng: <b>people + who + verb</b>.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Cần danh từ sau <i>whose</i>.</li><li><b>B.</b> Không dùng cho người.</li><li><b>D.</b> Không làm chủ ngữ.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Mệnh đề quan hệ: <b>who</b> dùng cho người và có thể làm chủ ngữ.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. who</div>"},{"n":2,"section":1,"stem":"Question 2:","options":{"A":"a","B":"an","C":"the","D":"no article"},"correct":"B","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> <b>a</b>: dùng trước âm phụ âm.</li><li><b>B.</b> <b>an</b>: dùng trước âm nguyên âm; <i>effort</i> bắt đầu bằng /e/.</li><li><b>C.</b> <b>the</b>: mạo từ xác định, không phù hợp.</li><li><b>D.</b> Danh từ đếm được số ít <i>effort</i> cần mạo từ.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Mỗi chương trình đều nỗ lực kết nối những câu chuyện xưa với cuộc sống hiện đại.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Collocation <b>make an effort to do something</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn B?</b><p>Vì <i>effort</i> bắt đầu bằng âm nguyên âm nên dùng <b>an</b>.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai âm đầu.</li><li><b>C.</b> Quá xác định.</li><li><b>D.</b> Thiếu mạo từ.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Học nguyên cụm: <b>make an effort to V</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: B. an</div>"},{"n":3,"section":1,"stem":"Question 3:","options":{"A":"closer","B":"as close","C":"close","D":"the closest"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> <b>closer</b>: so sánh hơn của <i>close</i>.</li><li><b>B.</b> <b>as close</b>: cần <i>as close as</i>.</li><li><b>C.</b> <b>close</b>: nguyên cấp.</li><li><b>D.</b> <b>the closest</b>: so sánh nhất.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Âm nhạc dân gian có thể gần gũi với người trẻ hơn một ký ức trong bảo tàng...”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Từ khóa <b>than</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p><b>closer ... than</b> là cấu trúc đúng.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>B.</b> Sai cấu trúc.</li><li><b>C.</b> Thiếu so sánh hơn.</li><li><b>D.</b> Sai cấp so sánh.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Tính từ ngắn: <b>adj-er + than</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. closer</div>"},{"n":4,"section":1,"stem":"Question 4:","options":{"A":"at","B":"with","C":"for","D":"from"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Sai collocation.</li><li><b>B.</b> Không phải cụm chuẩn trong nghĩa này.</li><li><b>C.</b> <b>be famous for</b> = nổi tiếng vì.</li><li><b>D.</b> Sai collocation.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Buổi tối nổi tiếng vì bầu không khí tiệc tùng ấm áp...”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Collocation cố định <b>be famous for</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>C hoàn chỉnh cụm đúng.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai.</li><li><b>B.</b> Sai.</li><li><b>D.</b> Sai.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>be famous for + N/V-ing</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. for</div>"},{"n":5,"section":1,"stem":"Question 5:","options":{"A":"give","B":"make","C":"take","D":"pay"},"correct":"D","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Không phải collocation mục tiêu.</li><li><b>B.</b> Sai.</li><li><b>C.</b> Sai.</li><li><b>D.</b> <b>pay attention to</b> = chú ý đến.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Hãy đến sớm, chụp ảnh và chú ý đến những nhịp điệu từng gắn kết các gia đình.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Sau chỗ trống có <b>attention to</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn D?</b><p>Cụm cố định duy nhất là <b>pay attention to</b>.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Không tự nhiên bằng cụm chuẩn.</li><li><b>B.</b> Sai.</li><li><b>C.</b> Sai.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>pay attention to + N/V-ing</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: D. pay</div>"},{"n":6,"section":1,"stem":"Question 6:","options":{"A":"excite","B":"exciting","C":"excitement","D":"excited"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> động từ.</li><li><b>B.</b> tính từ gây hứng thú.</li><li><b>C.</b> danh từ: sự hào hứng.</li><li><b>D.</b> tính từ chỉ cảm xúc.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Hãy để âm nhạc giúp bạn cảm nhận sự hào hứng của truyền thống Việt Nam.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Sau <b>the</b> và trước <b>of</b> cần danh từ.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p><b>excitement</b> là danh từ phù hợp.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai từ loại.</li><li><b>B.</b> Sai từ loại.</li><li><b>D.</b> Sai từ loại.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Word family: excite → exciting/excited → <b>excitement</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. excitement</div>"},{"n":7,"section":2,"stem":"Question 7:","options":{"A":"for","B":"and","C":"but","D":"nor"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> vì/bởi vì.</li><li><b>B.</b> và.</li><li><b>C.</b> nhưng, thể hiện đối lập.</li><li><b>D.</b> cũng không, thường sau ý phủ định.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Nhiều học sinh có thể nhanh chóng kể tên các ngôi sao online, nhưng lại không nhận ra phách tre, cồng hay đàn nguyệt.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Hai vế đối lập trực tiếp.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p><b>but</b> là liên từ phù hợp.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai logic.</li><li><b>B.</b> Không thể hiện đối lập.</li><li><b>D.</b> Sai cấu trúc.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Dùng <b>but</b> cho tương phản.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. but</div>"},{"n":8,"section":2,"stem":"Question 8:","options":{"A":"both","B":"either","C":"neither","D":"none"},"correct":"B","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> cả hai.</li><li><b>B.</b> một trong hai.</li><li><b>C.</b> không cái nào trong hai.</li><li><b>D.</b> không cái nào trong một nhóm.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Bạn có thể chọn cồng hoặc phách tre. Bạn không cần phải chơi bất kỳ loại nào trong hai loại đó thật hoàn hảo.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Ngay trước có hai lựa chọn nối bằng <b>or</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn B?</b><p><b>either</b> phù hợp nhất.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Đòi cả hai.</li><li><b>C.</b> Tạo nghĩa không tự nhiên với <i>do not have to</i>.</li><li><b>D.</b> Không phù hợp cách dùng.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>either</b> = một trong hai.</p></div>\n<div class=\"answer-line\">Đáp án đúng: B. either</div>"},{"n":9,"section":2,"stem":"Question 9:","options":{"A":"try","B":"tried","C":"had tried","D":"trying"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> hiện tại đơn.</li><li><b>B.</b> quá khứ đơn.</li><li><b>C.</b> quá khứ hoàn thành.</li><li><b>D.</b> V-ing.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Nếu bạn thử một nhịp điệu đơn giản cùng chúng tôi, bạn sẽ thấy âm nhạc dân gian thú vị đến mức nào.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Vế chính có <b>will see</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>Câu điều kiện loại 1 dùng hiện tại đơn trong mệnh đề if.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>B.</b> Sai thì.</li><li><b>C.</b> Sai loại điều kiện.</li><li><b>D.</b> Sai cấu trúc.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>If + present simple, will + V</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. try</div>"},{"n":10,"section":2,"stem":"Question 10:","options":{"A":"look","B":"put","C":"come","D":"take"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> look up = tra cứu.</li><li><b>B.</b> put up = dựng/đăng.</li><li><b>C.</b> come up with = nghĩ ra.</li><li><b>D.</b> take up = bắt đầu/chiếm.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Làm việc theo nhóm và nghĩ ra một ý tưởng sân khấu dài hai phút.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Sau chỗ trống có <b>up with</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>Phrasal verb đúng là <b>come up with</b>.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai cụm.</li><li><b>B.</b> Sai nghĩa.</li><li><b>D.</b> Sai cụm.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>come up with an idea</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. come</div>"},{"n":11,"section":2,"stem":"Question 11:","options":{"A":"prize","B":"recording","C":"presentation","D":"competition"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> giải thưởng.</li><li><b>B.</b> bản thu.</li><li><b>C.</b> bài thuyết trình.</li><li><b>D.</b> cuộc thi.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Hãy thực hiện một bài thuyết trình ngắn về một nhạc cụ.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Collocation <b>give a presentation about/on...</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>C đúng.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai nghĩa.</li><li><b>B.</b> Sai nghĩa.</li><li><b>D.</b> Sai nghĩa.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>give a presentation</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. presentation</div>"},{"n":12,"section":2,"stem":"Question 12:","options":{"A":"fame","B":"score","C":"heritage","D":"comment"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> danh tiếng.</li><li><b>B.</b> điểm số.</li><li><b>C.</b> di sản.</li><li><b>D.</b> bình luận.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Hãy giữ những âm thanh xưa sống mãi và bảo vệ di sản chung của chúng ta.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Ngữ cảnh là traditional music, local culture, national pride.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p><b>shared heritage</b> phù hợp hoàn toàn.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai chủ đề.</li><li><b>B.</b> Sai nghĩa.</li><li><b>D.</b> Sai nghĩa.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Collocation: <b>shared/cultural heritage</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. heritage</div>"},{"n":13,"section":3,"stem":"<div class=\"arrange-bank\"><p><b>a.</b> Emma: The stage light is working now, but my microphone is still missing before the live performance.</p><p><b>b.</b> Noah: Check the instrument table. I saw a silver mic beside the gong earlier.</p><p><b>c.</b> Emma: Great. I’ll bring it back before the guest artist announces the scores.</p></div>","options":{"A":"b – a – c","B":"a – c – b","C":"c – b – a","D":"a – b – c"},"correct":"D","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Giải pháp trước khi vấn đề được nêu.</li><li><b>B.</b> c phản hồi <i>Great</i> trước khi Noah đưa giải pháp.</li><li><b>C.</b> Mở bằng phản hồi, thiếu tiền đề.</li><li><b>D.</b> a nêu vấn đề → b chỉ nơi có micro → c phản hồi và hành động.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>Emma nói micro vẫn mất; Noah bảo kiểm tra bàn nhạc cụ; Emma cảm ơn và sẽ mang nó lại.</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p><i>Great</i> ở c phải theo sau giải pháp b; b phải theo sau vấn đề a.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn D?</b><p>D tạo mạch hội thoại tự nhiên.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai thứ tự.</li><li><b>B.</b> Sai phản hồi.</li><li><b>C.</b> Thiếu tiền đề.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Problem → suggestion → response.</p></div>\n<div class=\"answer-line\">Đáp án đúng: D. a – b – c</div>"},{"n":14,"section":3,"stem":"<div class=\"arrange-bank\"><p><b>a.</b> Owen: We can upload a shorter recording and link the full performance under it.</p><p><b>b.</b> Owen: No, they score the live performance, not the social media clip; the clip only attracts audience votes.</p><p><b>c.</b> Mira: The survey result says most viewers prefer short clips, but our finalist video is eight minutes long.</p><p><b>d.</b> Mira: Good point. I’ll edit the opening chant and keep the best costume scene.</p><p><b>e.</b> Mira: Might that hurt the judges’ view of our preparation?</p></div>","options":{"A":"c – a – e – b – d","B":"e – b – c – a – d","C":"c – b – d – a – e","D":"d – a – e – b – c"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> c nêu vấn đề → a đề xuất clip ngắn → e lo ảnh hưởng giám khảo → b giải thích → d đồng ý chỉnh sửa.</li><li><b>B.</b> e hỏi ‘that’ khi chưa có đề xuất.</li><li><b>C.</b> b trả lời <i>No</i> trước câu hỏi e.</li><li><b>D.</b> d mở bằng <i>Good point</i> không có tiền đề.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>Mira nói video quá dài; Owen đề xuất đăng bản ngắn và link bản đầy đủ; Mira lo ảnh hưởng giám khảo; Owen giải thích; Mira đồng ý chỉnh.</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Cặp <b>Might that...? → No...</b> khóa e–b; <b>Good point</b> phải đứng sau lời giải thích.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>A là chuỗi tự nhiên nhất.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>B.</b> Thiếu antecedent.</li><li><b>C.</b> Đảo hỏi–đáp.</li><li><b>D.</b> Mở sai.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Theo dõi đại từ và cặp hỏi–đáp.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. c – a – e – b – d</div>"},{"n":15,"section":3,"stem":"<div class=\"arrange-bank\"><p>Dear Linh,<br>We hope you are well.</p><p><b>a.</b> If you accept, please reply by Friday with your musical instrument, stage name, and contact number.</p><p><b>b.</b> Your recorded song “River Lights” received one of the highest audience scores in our online round.</p><p><b>c.</b> After your confirmation, we will send the rehearsal schedule, costume rules, and upload instructions for the programme website.</p><p><b>d.</b> This result placed you first on the waiting list, although the final-night stage was already full.</p><p><b>e.</b> One finalist has now withdrawn, so the organising team would like to invite you to participate in the charity concert on 18 July, with a five-minute live performance and a short interview.</p><p>Best regards,<br>Green Stage Team</p></div>","options":{"A":"e – b – d – a – c","B":"b – d – e – a – c","C":"d – b – e – c – a","D":"a – c – b – d – e"},"correct":"B","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Lời mời trước khi giải thích kết quả/waiting list.</li><li><b>B.</b> b kết quả online → d <i>This result</i> đưa lên waiting list → e finalist rút nên mời → a yêu cầu phản hồi → c bước tiếp theo sau xác nhận.</li><li><b>C.</b> d mở bằng <i>This result</i> chưa có antecedent; c trước yêu cầu xác nhận.</li><li><b>D.</b> Yêu cầu trả lời trước khi nêu lời mời.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>Email giải thích Linh đạt điểm cao, đứng đầu danh sách chờ; có người rút nên được mời; cần xác nhận rồi mới nhận lịch tập.</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p><i>This result</i> → b trước d; <i>If you accept</i> sau e; <i>After your confirmation</i> sau a.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn B?</b><p>B liên kết hoàn chỉnh.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai logic.</li><li><b>C.</b> Sai tham chiếu.</li><li><b>D.</b> Sai thứ tự.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Result → status → invitation → response → next steps.</p></div>\n<div class=\"answer-line\">Đáp án đúng: B. b – d – e – a – c</div>"},{"n":16,"section":3,"stem":"<div class=\"arrange-bank\"><p><b>a.</b> However, they remembered her calm live performance at the lunch concert, where she combined a soft voice with a simple guitar rhythm.</p><p><b>b.</b> The finding taught our club to ask clear questions before judging what “popular” really means at school.</p><p><b>c.</b> The most surprising result of our music survey was not the winner’s name but the way students chose her.</p><p><b>d.</b> That memory mattered more than fame when the survey asked which performer made them feel relaxed after exams.</p><p><b>e.</b> Most voters had never seen Nina on social media, because she rarely uploaded practice clips.</p></div>","options":{"A":"c – e – a – d – b","B":"e – a – d – b – c","C":"a – c – e – d – b","D":"d – c – e – b – a"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> c câu chủ đề → e Nina ít xuất hiện online → a <i>However</i> họ nhớ live performance → d <i>That memory</i> quan trọng hơn fame → b rút ra bài học.</li><li><b>B.</b> Câu chủ đề c bị đặt cuối.</li><li><b>C.</b> a mở bằng <i>However</i> thiếu ý tương phản.</li><li><b>D.</b> d mở bằng <i>That memory</i> chưa có antecedent.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>Kết quả khảo sát bất ngờ ở cách học sinh chọn Nina: không phải fame online mà là ký ức về phần biểu diễn trực tiếp bình tĩnh.</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p><b>However → That memory → The finding</b> khóa trật tự.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>A đúng.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>B.</b> Câu chủ đề cuối.</li><li><b>C.</b> Từ nối thiếu tiền đề.</li><li><b>D.</b> Đại từ quy chiếu sai.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Theo dõi từ nối và antecedent.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. c – e – a – d – b</div>"},{"n":17,"section":3,"stem":"<div class=\"arrange-bank\"><p><b>a.</b> However, the counting sheet showed a different pattern: many people left after the fireworks, while smaller groups stayed near the stage where local musicians were tuning gongs and bamboo clappers.</p><p><b>b.</b> By comparing movement, comments, and total views, we learned that popularity at an event may depend less on a loud moment than on an experience people can participate in.</p><p><b>c.</b> The fireworks attracted the biggest crowd at first, so several organisers assumed they would be the main attraction of the evening.</p><p><b>d.</b> Their patient listening later produced warmer comments online than the fireworks photos, especially because the performers invited children to try simple rhythms.</p><p><b>e.</b> At last month’s community music festival, our volunteer team was asked to record which activities actually kept visitors in the square after sunset.</p></div>","options":{"A":"e – c – a – d – b","B":"c – e – a – d – b","C":"e – a – c – b – d","D":"a – d – b – e – c"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> e bối cảnh/nhiệm vụ → c pháo hoa hút đông lúc đầu → a <i>However</i> dữ liệu cho thấy kiểu khác → d <i>Their</i> listening tạo phản hồi tốt → b kết luận.</li><li><b>B.</b> c trước khi giới thiệu bối cảnh.</li><li><b>C.</b> a dùng <i>However</i> trước ý c để tương phản.</li><li><b>D.</b> Mở bằng <i>However</i> và để bối cảnh cuối.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>Nhóm theo dõi hoạt động giữ chân khách; pháo hoa đông nhất lúc đầu nhưng người ở lại lâu là nhóm tham gia âm nhạc, dẫn tới bài học về trải nghiệm có tính tham gia.</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p><b>However</b> đối lập c; <b>Their</b> quy chiếu nhóm trong a; b là kết luận.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>A đúng mạch.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>B.</b> Thiếu bối cảnh.</li><li><b>C.</b> Sai quan hệ tương phản.</li><li><b>D.</b> Mở sai.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Bối cảnh → kỳ vọng → dữ liệu trái kỳ vọng → hệ quả → kết luận.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. e – c – a – d – b</div>"},{"n":18,"section":4,"stem":"Question 18:","options":{"A":"Since initial excitement around new venues can gradually fade","B":"The growing audience for live music has already peaked","C":"Located near several theatres, the new centre is easy to find","D":"Public interest in cultural performances has remained completely stable"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Vì sự hào hứng ban đầu quanh địa điểm mới có thể dần phai — hợp logic với nỗi lo duy trì public attention.</li><li><b>B.</b> Nói audience đã đạt đỉnh — trái câu trước nói interest is growing.</li><li><b>C.</b> Chỉ nói vị trí; không giải thích việc duy trì sự chú ý.</li><li><b>D.</b> Nói interest hoàn toàn ổn định — trái ý growing.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Vì sự hào hứng ban đầu đối với địa điểm mới có thể dần phai, ban tổ chức thừa nhận rằng duy trì sự chú ý của công chúng sẽ cần nhiều hơn việc chỉ trưng bày nhạc cụ cũ.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Sau chỗ trống là mối lo về <b>maintaining public attention</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>A tạo nguyên nhân tự nhiên nhất.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>B.</b> Trái dữ kiện.</li><li><b>C.</b> Sai mạch.</li><li><b>D.</b> Trái nghĩa.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Ưu tiên quan hệ logic giữa câu chèn và câu sau.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. Since initial excitement around new venues can gradually fade</div>"},{"n":19,"section":4,"stem":"Question 19:","options":{"A":"with visitors’ voices being treated as historical evidence","B":"after visitors compare old recordings before each live performance","C":"where visitors can compare their voices with traditional recordings","D":"which replace live performers with automatically generated melodies"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Không có ý xem giọng khách là historical evidence.</li><li><b>B.</b> Cấu trúc và nghĩa không tự nhiên.</li><li><b>C.</b> <b>where</b> giải thích booths là nơi khách so sánh giọng mình với bản thu truyền thống.</li><li><b>D.</b> Trái mục tiêu centre; booths không thay performer.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“...các phòng thu tương tác, nơi khách có thể so sánh giọng của mình với các bản thu truyền thống...”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Antecedent là <b>interactive recording booths</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>Dùng <b>where</b> cho nơi chốn.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai nội dung.</li><li><b>B.</b> Sai cấu trúc.</li><li><b>D.</b> Sai ý.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>where = in/at which</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. where visitors can compare their voices with traditional recordings</div>"},{"n":20,"section":4,"stem":"Question 20:","options":{"A":"when local artists perform it before tourist audiences","B":"which audiences usually upload after school performances online","C":"through which musicians judge a recording’s cultural popularity","D":"used by performers to accompany chanting in traditional ceremonies"},"correct":"D","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Không mô tả trực tiếp công dụng nhạc cụ.</li><li><b>B.</b> Khán giả không ‘upload’ nhạc cụ.</li><li><b>C.</b> Không phải chức năng của đàn nguyệt.</li><li><b>D.</b> Cụm V3 rút gọn: được performer dùng để đệm hát trong nghi lễ truyền thống.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Một điểm nổi bật là chiếc đàn nguyệt, được nghệ sĩ sử dụng để đệm lối hát trong các nghi lễ truyền thống.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Sau dấu phẩy cần thông tin mô tả <b>a moon-shaped lute</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn D?</b><p>D đúng ngữ pháp và nghĩa.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai chức năng.</li><li><b>B.</b> Sai nghĩa.</li><li><b>C.</b> Sai nghĩa.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>N, used by...,</b> = N, which is used by...</p></div>\n<div class=\"answer-line\">Đáp án đúng: D. used by performers to accompany chanting in traditional ceremonies</div>"},{"n":21,"section":4,"stem":"Question 21:","options":{"A":"which old recordings performers should copy without interpretation","B":"why regional styles should be removed from live performances","C":"whether regional history shapes the way a melody is performed","D":"because every region uses exactly the same singing style"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Không phù hợp với việc wonder về sự đa dạng vùng miền.</li><li><b>B.</b> Bài không nói nên loại bỏ regional styles.</li><li><b>C.</b> Câu hỏi gián tiếp đúng: liệu lịch sử vùng miền có định hình cách giai điệu được biểu diễn hay không.</li><li><b>D.</b> Sai ngữ pháp sau <i>wonder</i> và trái <i>variety of singing styles</i>.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Sự đa dạng phong cách hát khiến khách tự hỏi liệu lịch sử vùng miền có định hình cách một giai điệu được biểu diễn hay không.”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Động từ <b>wonder</b> thường đi với <b>whether/why/how...</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>C đúng cả cấu trúc và nội dung.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>A.</b> Sai ý.</li><li><b>B.</b> Sai ý.</li><li><b>D.</b> Sai ngữ pháp và dữ kiện.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p><b>wonder whether + clause</b>.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. whether regional history shapes the way a melody is performed</div>"},{"n":22,"section":4,"stem":"Question 22:","options":{"A":"traditional music, both artistic practice and cultural memory","B":"that traditional music remains popular among online audiences today","C":"which traditional musicians perform for school audiences today","D":"with traditional recordings shared by local artists online"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Phân tích từ vựng / cấu trúc 4 đáp án</b><ul><li><b>A.</b> Cụm danh từ làm chủ ngữ: traditional music... deserves...</li><li><b>B.</b> Sau <i>believes that...</i> đã tạo mệnh đề hoàn chỉnh, rồi còn <i>deserves</i> gây lỗi.</li><li><b>C.</b> Sai cấu trúc mệnh đề quan hệ.</li><li><b>D.</b> Cụm <i>with...</i> không làm chủ ngữ của <i>deserves</i>.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch nghĩa toàn câu / ngữ cảnh</b><p>“Người sáng lập tin rằng âm nhạc truyền thống, vừa là thực hành nghệ thuật vừa là ký ức văn hóa, xứng đáng có một không gian riêng...”</p></div>\n<div class=\"ex-step\"><b>3. Từ khóa hoặc dấu hiệu</b><p>Sau <b>believes</b> cần mệnh đề với chủ ngữ <b>traditional music</b> và động từ <b>deserves</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>A tạo câu hoàn chỉnh.</p></div>\n<div class=\"ex-step\"><b>5. Tại sao không chọn các đáp án còn lại?</b><ul><li><b>B.</b> Hai động từ chính không nối đúng.</li><li><b>C.</b> Sai cấu trúc.</li><li><b>D.</b> Không làm chủ ngữ.</li></ul></div>\n<div class=\"ex-step\"><b>6. Kiến thức cần nhớ</b><p>Cụm đồng vị có thể bổ sung nghĩa cho chủ ngữ giữa hai dấu phẩy.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. traditional music, both artistic practice and cultural memory</div>"},{"n":23,"section":5,"stem":"Question 23: According to paragraph 1, what is suggested about chầu văn?","options":{"A":"It is mainly a concert in which listeners enjoy traditional instruments.","B":"It can be fully understood before the listener notices its ritual elements.","C":"It is a cultural practice combining belief, art, and Vietnamese identity.","D":"It depends mostly on colourful costumes rather than music or movement."},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Sai: bài nói rõ <i>not an ordinary concert</i>.</li><li><b>B.</b> Trái câu mở đầu.</li><li><b>C.</b> Đúng gần như nguyên văn câu cuối đoạn 1.</li><li><b>D.</b> Quá hẹp và sai; chầu văn là tổng hòa nhiều yếu tố.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Theo đoạn 1, bài gợi ý điều gì về chầu văn?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p><i>It is a cultural practice where belief, art, and Vietnamese identity meet.</i></p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>C paraphrase trực tiếp.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. It is a cultural practice combining belief, art, and Vietnamese identity.</div>"},{"n":24,"section":5,"stem":"Question 24: The word “its” in paragraph 2 refers to ______.","options":{"A":"the ceremony","B":"the music","C":"each moment","D":"every spirit"},"correct":"D","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Không phù hợp.</li><li><b>B.</b> Music không có rank/costume/dance riêng.</li><li><b>C.</b> Moment không có rank/costume.</li><li><b>D.</b> Đúng: <i>every spirit has its own rank...</i></li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Từ <i>its</i> ở đoạn 2 thay cho gì?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Antecedent trực tiếp là <b>every spirit</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn D?</b><p>D đúng.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: D. every spirit</div>"},{"n":25,"section":5,"stem":"Question 25: Which of the following best paraphrases the underlined sentence in paragraph 2?","options":{"A":"The performer sings mainly because the audience expects an entertaining show.","B":"The performer’s singing serves a ritual purpose beyond pleasing listeners.","C":"The performer avoids attracting attention during the spiritual ceremony.","D":"The performer sings only after worshippers have chosen the right costume."},"correct":"B","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Sai: biến entertainment thành mục đích chính.</li><li><b>B.</b> Đúng: singing phục vụ mục đích nghi lễ vượt ra ngoài làm vui khán giả.</li><li><b>C.</b> Không nói performer tránh thu hút chú ý.</li><li><b>D.</b> Không có thông tin này.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Phương án nào diễn đạt lại tốt nhất câu gạch chân?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Ngay sau câu gạch chân, bài nói voice/instruments/rhythm <b>support an act of worship</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn B?</b><p>B giữ đúng ý.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: B. The performer’s singing serves a ritual purpose beyond pleasing listeners.</div>"},{"n":26,"section":5,"stem":"Question 26: The word “accomplished” in paragraph 3 is closest in meaning to ______.","options":{"A":"proficient","B":"relaxed","C":"decorative","D":"ordinary"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> proficient = thành thạo, giỏi.</li><li><b>B.</b> relaxed = thư giãn.</li><li><b>C.</b> decorative = trang trí.</li><li><b>D.</b> ordinary = bình thường.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Từ <i>accomplished</i> gần nghĩa nhất với gì?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p><i>accomplished musicians</i> là những nhạc sĩ có kỹ năng cao.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>A đúng.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. proficient</div>"},{"n":27,"section":5,"stem":"Question 27: The word “diluted” in paragraph 4 is OPPOSITE in meaning to ______.","options":{"A":"kept strong","B":"made simple","C":"shown clearly","D":"used often"},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> kept strong = được giữ mạnh/đậm.</li><li><b>B.</b> made simple = làm đơn giản.</li><li><b>C.</b> shown clearly = thể hiện rõ.</li><li><b>D.</b> used often = dùng thường xuyên.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Từ <i>diluted</i> TRÁI NGHĨA với gì?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p><i>deeper meaning may be diluted</i> = ý nghĩa sâu sắc bị làm loãng/yếu đi.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>Đối nghĩa là <b>kept strong</b>.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. kept strong</div>"},{"n":28,"section":5,"stem":"Question 28: Which of the following statements would the writer most likely NOT agree with?","options":{"A":"Chầu văn music supports an act of worship during the lên đồng ritual.","B":"The artistic side of chầu văn can help young people connect with culture.","C":"Chầu văn should be presented with respect for its spiritual meaning.","D":"Chầu văn becomes more valuable when it is performed only to attract online views."},"correct":"D","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Đúng với đoạn 2.</li><li><b>B.</b> Đúng với đoạn 3.</li><li><b>C.</b> Đúng với đoạn 4.</li><li><b>D.</b> Trái trực tiếp đoạn 4: chạy theo views có thể làm meaning bị diluted.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Phát biểu nào tác giả KHÔNG đồng ý?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Đoạn 4 cảnh báo việc chỉ biểu diễn để entertain/attract views.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn D?</b><p>D trái lập trường.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: D. Chầu văn becomes more valuable when it is performed only to attract online views.</div>"},{"n":29,"section":5,"stem":"Question 29: In which paragraph does the writer mention how chầu văn may help young people connect with national culture?","options":{"A":"Paragraph 4","B":"Paragraph 2","C":"Paragraph 3","D":"Paragraph 1"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Đoạn 4: cách trình bày.</li><li><b>B.</b> Đoạn 2: nghi lễ.</li><li><b>C.</b> Đúng: <i>help young people identify with national culture...</i>.</li><li><b>D.</b> Đoạn 1: giới thiệu bản chất.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Đoạn nào nói chầu văn giúp người trẻ kết nối với văn hóa dân tộc?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Bằng chứng nằm ở đoạn 3.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>C chính xác.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. Paragraph 3</div>"},{"n":30,"section":5,"stem":"Question 30: In which paragraph does the writer state that chầu văn can connect tradition with modern life if it is presented properly?","options":{"A":"Paragraph 2","B":"Paragraph 4","C":"Paragraph 1","D":"Paragraph 3"},"correct":"B","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Đoạn 2: worship.</li><li><b>B.</b> Đúng: câu cuối đoạn 4.</li><li><b>C.</b> Đoạn 1: khái quát.</li><li><b>D.</b> Đoạn 3: performance art.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Đoạn nào nói chầu văn có thể nối truyền thống với hiện đại nếu được trình bày đúng cách?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p><i>When presented properly, it becomes a bridge between tradition and modern life.</i></p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn B?</b><p>B trả lời trực tiếp.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: B. Paragraph 4</div>"},{"n":31,"section":6,"stem":"Question 31: Where in paragraph 4 does the following sentence best fit?<br><span class='insert-sentence'>It was an unforgettable experience that combined music, emotion, and a strong sense of community.</span>","options":{"A":"[I]","B":"[II]","C":"[III]","D":"[IV]"},"correct":"D","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Quá sớm, chưa có đủ minh họa.</li><li><b>B.</b> Có thể hiểu nhưng đoạn vẫn còn phát triển thêm.</li><li><b>C.</b> Đặt trước câu <i>more than entertainment</i> kém tự nhiên hơn.</li><li><b>D.</b> Tốt nhất: sau câu tổng kết <i>the night was more than entertainment</i>, làm câu kết đánh giá toàn bộ trải nghiệm.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Câu chèn nên đặt ở đâu?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Đoạn 4 đi từ kết nối xuyên văn hóa → fan hát theo → video lan truyền → đêm diễn hơn cả giải trí.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn D?</b><p>D là vị trí kết luận tự nhiên nhất.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Câu mang chức năng tổng kết thường đứng sau các bằng chứng và câu khái quát cuối.</p></div>\n<div class=\"answer-line\">Đáp án đúng: D. [IV]</div>"},{"n":32,"section":6,"stem":"Question 32: The phrase “a rare chance” in paragraph 1 is closest in meaning to ______.","options":{"A":"a private invitation","B":"a special opportunity","C":"a regular activity","D":"a careful decision"},"correct":"B","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> lời mời riêng tư.</li><li><b>B.</b> một cơ hội đặc biệt/hiếm có.</li><li><b>C.</b> hoạt động thường xuyên.</li><li><b>D.</b> quyết định cẩn thận.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Cụm <i>a rare chance</i> gần nghĩa nhất với gì?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Fans coi concert là cơ hội hiếm để xem world-famous artist live.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn B?</b><p>B đúng nghĩa.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: B. a special opportunity</div>"},{"n":33,"section":6,"stem":"Question 33: The word “them” in paragraph 1 refers to ______.","options":{"A":"international singers","B":"short online clips","C":"many young fans","D":"expensive tickets"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Không phù hợp.</li><li><b>B.</b> Xuất hiện sau <i>For them</i>.</li><li><b>C.</b> Đúng: <i>many fans... For them...</i>.</li><li><b>D.</b> Tickets không thể xem clip.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Từ <i>them</i> thay cho gì?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Antecedent là <b>many fans</b>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>C đúng.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. many young fans</div>"},{"n":34,"section":6,"stem":"Question 34: Which of the following is NOT mentioned in the passage?","options":{"A":"The concert was broadcast live for fans who stayed home.","B":"Some fans prepared handmade items before the show.","C":"Elena used short talks to encourage her audience.","D":"Videos from the concert became popular after the event."},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Không có thông tin livestream.</li><li><b>B.</b> Có: homemade bracelets.</li><li><b>C.</b> Có: Elena nói chuyện và động viên fan.</li><li><b>D.</b> Có: videos spread quickly on social media.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Ý nào KHÔNG được nhắc?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Chỉ A không có bằng chứng.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>A đúng.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. The concert was broadcast live for fans who stayed home.</div>"},{"n":35,"section":6,"stem":"Question 35: According to paragraph 2, why did the music feel more powerful during the concert?","options":{"A":"Digital screens replaced the need to watch Elena directly.","B":"The crowd’s noise made the band stop playing for a while.","C":"Different stage elements worked together to intensify the live performance.","D":"Handmade items were the main reason the stadium became energetic."},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Màn hình chỉ hiển thị close-up.</li><li><b>B.</b> Crowd khiến Elena pause, không làm band stop.</li><li><b>C.</b> Đúng: live band + screens + lighting + atmosphere cùng làm performance mạnh hơn.</li><li><b>D.</b> Bracelets chỉ là chi tiết phụ.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Theo đoạn 2, vì sao âm nhạc cảm giác mạnh mẽ hơn?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Câu cuối đoạn 2 nói lighting tạo dramatic atmosphere làm music feel more powerful.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>C khái quát đúng các yếu tố sân khấu.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. Different stage elements worked together to intensify the live performance.</div>"},{"n":36,"section":6,"stem":"Question 36: Which of the following best summarises paragraph 3?","options":{"A":"Elena’s pauses mainly helped the crowd rest after the loud stage effects.","B":"Elena’s brief interactions made a large concert feel personal and encouraging.","C":"Elena’s popularity came more from giving advice than from performing music.","D":"Elena’s fans felt close to her mainly because the stage looked impressive."},"correct":"B","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Sai mục đích.</li><li><b>B.</b> Đúng: các lời nói ngắn làm show personal, meaningful, encouraging.</li><li><b>C.</b> Không có so sánh nguồn popularity.</li><li><b>D.</b> Stage effects thuộc đoạn 2.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Phương án nào tóm tắt đoạn 3 tốt nhất?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Đoạn 3 tập trung short messages và cảm giác fan được nói trực tiếp.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn B?</b><p>B bao quát nhất.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: B. Elena’s brief interactions made a large concert feel personal and encouraging.</div>"},{"n":37,"section":6,"stem":"Question 37: The word “vibrant” in paragraph 2 is closest in meaning to ______.","options":{"A":"busy","B":"lively","C":"cheerful","D":"bright"},"correct":"B","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> busy = bận/đông.</li><li><b>B.</b> lively = sôi động, đầy sức sống.</li><li><b>C.</b> cheerful = vui vẻ.</li><li><b>D.</b> bright = sáng.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Từ <i>vibrant</i> gần nghĩa nhất với gì?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p><i>a colourful and vibrant space</i> mô tả sân vận động sôi động.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn B?</b><p>B gần nghĩa nhất.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: B. lively</div>"},{"n":38,"section":6,"stem":"Question 38: Which of the following best paraphrases the underlined sentence in paragraph 4?","options":{"A":"Fans could connect with the songs emotionally even without perfect English.","B":"Fans understood the lyrics because the chorus was repeated many times.","C":"Fans sang along mainly to show that they knew English well.","D":"Fans enjoyed the concert, but language stopped them from feeling the songs."},"correct":"A","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Đúng: dù English không hoàn hảo, fan vẫn kết nối cảm xúc.</li><li><b>B.</b> Không có thông tin về việc chorus lặp nhiều lần.</li><li><b>C.</b> Sai mục đích.</li><li><b>D.</b> Trái câu gốc.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Phương án nào diễn đạt lại tốt nhất câu gạch chân?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Fan không nói English hoàn hảo nhưng vẫn hát theo và hiểu emotions behind lyrics.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn A?</b><p>A giữ nguyên ý.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: A. Fans could connect with the songs emotionally even without perfect English.</div>"},{"n":39,"section":6,"stem":"Question 39: Which of the following can be inferred from the passage?","options":{"A":"A concert becomes meaningful only when fans fully understand the lyrics.","B":"Online clips helped fans experience the show better than being there.","C":"The high ticket price made fans value the singer more than the music.","D":"A live concert can create shared feelings beyond simply listening to songs."},"correct":"D","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> <i>only</i> quá tuyệt đối.</li><li><b>B.</b> Trái đoạn 1: clips không thay được live experience.</li><li><b>C.</b> Không có so sánh này.</li><li><b>D.</b> Đúng: concert tạo atmosphere, tương tác cá nhân, cảm xúc chung và community.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Có thể suy ra điều gì từ toàn bài?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Các đoạn 2–4 đều mở rộng trải nghiệm khỏi việc chỉ nghe nhạc.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn D?</b><p>D tổng hợp đúng.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: D. A live concert can create shared feelings beyond simply listening to songs.</div>"},{"n":40,"section":6,"stem":"Question 40: Which of the following would be the best title for the passage?","options":{"A":"Elena Rose’s Expensive Concert Tickets","B":"How Social Media Changed a Pop Concert","C":"A Concert That Became More Than Music","D":"The Problems of Singing in a Foreign Language"},"correct":"C","explanation":"<h4>PHẦN GIẢI THÍCH CHI TIẾT</h4>\n<div class=\"ex-step\"><b>1. Dịch và phân tích 4 đáp án</b><ul><li><b>A.</b> Quá hẹp.</li><li><b>B.</b> Social media chỉ là chi tiết cuối.</li><li><b>C.</b> Đúng: bài nói concert là âm nhạc + hình ảnh + tương tác + kết nối văn hóa/cộng đồng.</li><li><b>D.</b> Sai trọng tâm.</li></ul></div>\n<div class=\"ex-step\"><b>2. Dịch câu hỏi</b><p>Tiêu đề nào phù hợp nhất?</p></div>\n<div class=\"ex-step\"><b>3. Bằng chứng trong bài</b><p>Đoạn 4 nói <i>the night was more than entertainment</i>.</p></div>\n<div class=\"ex-step\"><b>4. Tại sao chọn C?</b><p>C bao quát toàn bài.</p></div>\n<div class=\"ex-step\"><b>5. Chiến thuật cần nhớ</b><p>Bám sát đúng đoạn được hỏi, tìm từ khóa/paraphrase và loại các phương án suy diễn quá mức hoặc trái với thông tin bài đọc.</p></div>\n<div class=\"answer-line\">Đáp án đúng: C. A Concert That Became More Than Music</div>"}];
+const SOURCES={"1":"\n<div class=\"paper-instruction\">Read the following advertisement and mark the letter A, B, C, or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 1 to 6.</div>\n<h2>ECHOES IN THE CITY – FOLK SOUNDS FOR YOUNG HEARTS</h2>\n<h3>Why come?</h3>\n<p>Pop songs are everywhere, but folk melodies are waiting to be heard. Echoes in the City brings traditional sounds back to public spaces.</p>\n<h3>What to enjoy:</h3>\n<ul>\n<li>Meet local musicians <b>(1) ______</b> combine folk songs with fresh city beats.</li>\n<li>Each show makes <b>(2) ______</b> effort to connect old stories with modern life.</li>\n<li>Our guest performers will show how folk music can be <b>(3) ______</b> to young people than a museum memory: it can be fresh, emotional, and close to today’s audience.</li>\n</ul>\n<h3>Why you’ll love it:</h3>\n<p>The evening is famous <b>(4) ______</b> its warm party atmosphere, colourful costumes, and short storytelling corners. Come early, take photos, and <b>(5) ______</b> attention to the rhythms that once brought families together. Let the music help you feel the <b>(6) ______</b> of Vietnamese tradition.</p>\n","2":"\n<div class=\"paper-instruction\">Read the following leaflet and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 7 to 12.</div>\n<h2>🎶 Bring Old Sounds Back to Life!</h2>\n<p>Many students can name online stars quickly, <b>(7) ______</b> they cannot recognise a bamboo clapper, a gong, or the moon-shaped lute. Traditional music is not old-fashioned; it carries family stories, local culture, and national pride.</p>\n<h3>🌿 Join our “Roots in Rhythm” Day</h3>\n<ul>\n<li>Listen to a live performance by a guest artist.</li>\n<li>At the instrument table, you can choose a gong or a bamboo clapper. You do not have to play <b>(8) ______</b> perfectly; just listen, feel the rhythm, and enjoy the sound.</li>\n<li>If you <b>(9) ______</b> one simple rhythm with us, you will see how exciting folk music can be.</li>\n</ul>\n<h3>🎤 What will you do?</h3>\n<ul>\n<li>Work in groups and <b>(10) ______</b> up with a two-minute stage idea.</li>\n<li>Give a short <b>(11) ______</b> about one musical instrument.</li>\n<li>Vote for the most creative team, not the loudest one.</li>\n</ul>\n<p>Bring your friends, respect every performer, and keep phones silent during the show. Let’s keep these old sounds alive and protect our shared <b>(12) ______</b>.</p>\n","4":"\n<div class=\"paper-instruction\">Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 18 to 22.</div>\n<p>The decision to open a Traditional Music Discovery Centre in downtown Ho Chi Minh City comes at a time when interest in live cultural experiences is growing among young audiences. <b>(18) ______</b>, the organisers admit that maintaining public attention will require more than displaying old instruments. They plan to combine exhibitions with short performances, listening stations, and workshops where visitors can try simple rhythms.</p>\n<p>Although the centre’s location near several theatres is advantageous, the curators realise that visitors need a clear storyline, and the inclusion of interactive recording booths, <b>(19) ______</b>, should help keep them engaged throughout the tour. The centre presents more than one hundred photographs, costumes, and musical instruments. One highlight is a moon-shaped lute, <b>(20) ______</b>. Its curved body and bright tone show how traditional sound can be preserved through skilled craftsmanship.</p>\n<p>Moving to the upper rooms, guides explain how folk melodies changed across regions. Yet the variety of singing styles often leads guests to wonder <b>(21) ______</b>, especially when they compare live performances with older recordings. The founder, a young musician who has worked with school choirs, believes <b>(22) ______</b>, deserves a dedicated space to show its cultural value. The project aims to present traditional music not as a distant subject, but as a living performance art that can speak to modern listeners.</p>\n","5":"\n<div class=\"paper-instruction\">Read the passage and mark the letter A, B, C or D on your answer sheet to indicate the best answer to each of the following questions from 23 to 30.</div>\n<h2>Chầu Văn: A Bridge Between Belief, Art, and Vietnamese Cultural Identity</h2>\n<p><b>1.</b> The sound of chầu văn often begins before a listener fully understands the ritual. A singer chants in a clear voice, a moon-shaped lute answers with bright notes, and the bamboo clapper keeps a steady beat. Around the space, worshippers may see colourful costumes, offerings, and movements that follow strict rules. This is not an ordinary concert, nor is it only a musical performance. It is a cultural practice where belief, art, and Vietnamese identity meet.</p>\n<p><b>2.</b> Chầu văn is closely connected with the worship of the Mother Goddesses and the lên đồng ritual. During a ceremony, music helps guide each moment, for every spirit has <u><b>its</b></u> own rank, costume, dance, and songs. <u><b>The performer does not simply sing to attract an audience.</b></u> The voice, instruments, and rhythm support an act of worship, so the music becomes part of a spiritual conversation between people, saints, and goddesses.</p>\n<p><b>3.</b> At the same time, chầu văn is also a form of traditional performance art. Its melodies can be powerful, relaxing, or exciting, and <u><b>accomplished</b></u> musicians must respond quickly to the mood of the ritual. The combination of chanting, dance, costume, and musical instruments makes the atmosphere both sacred and artistic. Because of this, chầu văn can help young people identify with national culture in a more living way, not just through books or museum exhibitions.</p>\n<p><b>4.</b> Yet this heritage needs careful presentation. If it is performed only to entertain tourists or attract views on social media, its deeper meaning may be <u><b>diluted</b></u>. Chầu văn can spread to wider audiences, but it should remain connected to respect, worship, and cultural memory. When presented properly, it becomes a bridge between tradition and modern life.</p>\n","6":"\n<div class=\"paper-instruction\">Read the passage and mark the letter A, B, C or D on your answer sheet to indicate the best answer to each of the following questions from 31 to 40.</div>\n<p><b>1.</b> When international singer Elena Rose announced her first concert in Viet Nam, thousands of young fans immediately searched for tickets. Elena is known for her emotional voice, polished performances, and songs about youth, love, and self-belief. Although the tickets were expensive, many fans still considered the show <u><b>a rare chance</b></u> to see a world-famous artist perform live. For <u><b>them</b></u>, watching short clips online could not replace the excitement of being in the same stadium as their favourite singer.</p>\n<p><b>2.</b> On the night of the concert, the stadium became a colourful and <u><b>vibrant</b></u> space. Fans arrived early with posters, light sticks, and homemade bracelets. When Elena stepped onto the stage, the crowd cheered so loudly that she had to pause before singing the first line. Her band played live, while huge screens showed close-up images of her performance. The lighting changed with every song, creating a dramatic atmosphere that made the music feel more powerful.</p>\n<p><b>3.</b> However, the concert was not only about sound and visual effects. Elena often stopped between songs to talk to the audience. She thanked her fans for supporting her music and encouraged them to stay confident during difficult times. These short messages made the show more personal and meaningful. Many fans said they felt as if the singer was speaking directly to them, not just performing for a large crowd.</p>\n<p><b>4.</b> The event also showed how global music can connect people from different cultures. <b>[I]</b> Most fans did not speak English perfectly, but they still sang along with the chorus and understood the emotions behind the lyrics. <b>[II]</b> After the concert, videos of the best moments spread quickly on social media. <b>[III]</b> For many young people, the night was more than entertainment. <b>[IV]</b></p>\n"};
+const VOCAB={"4":[["maintain public attention","phrase"],["interactive recording booth","phrase"],["curator","n"],["engage visitors","phrase"],["moon-shaped lute","phrase"],["craftsmanship","n"],["folk melody","phrase"],["regional style","phrase"],["dedicated space","phrase"],["cultural value","phrase"],["live cultural experience","phrase"],["traditional recording","phrase"]],"5":[["ritual","n"],["chant","v/n"],["worshipper","n"],["offering","n"],["Mother Goddesses","proper phrase"],["lên đồng ritual","phrase"],["act of worship","phrase"],["spiritual conversation","phrase"],["accomplished","adj"],["sacred","adj"],["identify with","phrasal verb"],["heritage","n"],["dilute","v"],["cultural memory","phrase"]],"6":[["polished performance","phrase"],["self-belief","n"],["a rare chance","phrase"],["vibrant","adj"],["homemade bracelet","phrase"],["close-up image","phrase"],["dramatic atmosphere","phrase"],["encourage","v"],["meaningful","adj"],["sing along","phrasal verb"],["chorus","n"],["lyrics","n"],["sense of community","phrase"],["global music","phrase"]]};
+const ARRANGEMENT_INSTRUCTION="Mark the letter A, B, C or D on your answer sheet to indicate the best arrangement of utterances or sentences to make a cohesive and coherent exchange or text in each of the following questions from 13 to 17.";
+const KEY='unit3_music_test2_orangered_dark_v1';
+let soundOn=true;
+let state={answers:{},first:{},retries:{},name:'',cls:'',vocab:{}};
+// Explicit DOM references for maximum browser compatibility.
+const main=document.getElementById('main');
+const studentName=document.getElementById('studentName');
+const studentClass=document.getElementById('studentClass');
+const saveIdentity=document.getElementById('saveIdentity');
+const sDone=document.getElementById('sDone');
+const sLeft=document.getElementById('sLeft');
+const sCorrect=document.getElementById('sCorrect');
+const sWrong=document.getElementById('sWrong');
+const sRate=document.getElementById('sRate');
+const progress=document.getElementById('progress');
+const unfinishedBtn=document.getElementById('unfinishedBtn');
+const wrongBtn=document.getElementById('wrongBtn');
+const submitBtn=document.getElementById('submitBtn');
+const resetBtn=document.getElementById('resetBtn');
+const clearBtn=document.getElementById('clearBtn');
+const submitBox=document.getElementById('submitBox');
+const soundBtn=document.getElementById('soundBtn');
+
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function vocabBlock(sec){
+  const list=VOCAB[String(sec)]; if(!list)return '';
+  return `<div class="vocab"><h3>📘 TỪ VỰNG B1+ CẦN BIẾT TRƯỚC KHI ĐỌC</h3>
+  <div class="hint">Các từ/cụm quan trọng xuất hiện trực tiếp trong bài. Em tự tra và điền nghĩa tiếng Việt vào cột bên phải trước khi đọc.</div>
+  <div class="vgrid"><div class="vcell"><b>Từ / cụm từ</b></div><div class="vcell"><b>Nghĩa em tự tra</b></div>
+  ${list.map((x,i)=>`<div class="vrow"><div class="vcell"><span class="vword">${esc(x[0])}</span> <span class="pos">(${esc(x[1])})</span></div><div class="vcell"><input class="vocab-input" data-vocab="${sec}-${i}" value="${esc(state.vocab[sec+'-'+i]||'')}" placeholder="Tự điền nghĩa..."></div></div>`).join('')}</div></div>`;
+}
+function qCard(q){
+  return `<article class="qcard" id="q${q.n}" data-q="${q.n}">
+  <div class="qhead"><div class="qnum">${q.stem}</div><span class="qbadge">Câu ${q.n} / 40</span></div>
+  <div class="options" role="group" aria-label="Đáp án câu ${q.n}">
+    ${Object.entries(q.options).map(([k,v])=>`<button class="option" data-choice="${k}" aria-label="Câu ${q.n} đáp án ${k}"><span class="letter">${k}.</span><span class="txt">${v}</span><span class="state-tag"></span></button>`).join('')}
+  </div>
+  <div class="feedback" aria-live="polite"></div>
+  <div class="explain">${q.explanation}</div>
+  <div class="qactions"><button class="smallbtn retry">↻ Làm lại câu này</button><button class="smallbtn primary next">Câu tiếp theo →</button></div>
+  </article>`;
+}
+function render(){
+  let h='';
+  for(let sec=1;sec<=6;sec++){
+    const qs=QUESTIONS.filter(q=>q.section===sec);
+    if(sec===3){
+      h+=`<section class="section ${sec===1?'active':''}" id="sec${sec}"><div class="arr-layout">
+      <aside class="arr-guide"><h3>🧩 Questions 13–17</h3><p><b>${ARRANGEMENT_INSTRUCTION}</b></p><p class="note">Mẹo: theo dõi từ nối, đại từ quy chiếu, cặp hỏi–đáp và trình tự thời gian.</p></aside>
+      <div class="questions">${qs.map(q=>qCard(q)).join('')}</div></div></section>`;
+    } else {
+      h+=`<section class="section ${sec===1?'active':''}" id="sec${sec}">${vocabBlock(sec)}<div class="split">
+      <article class="passage">${SOURCES[String(sec)]||''}</article><div class="questions">${qs.map(q=>qCard(q)).join('')}</div></div></section>`;
+    }
+  }
+  main.innerHTML=h; bind(); restore();
+}
+function bind(){
+  document.querySelectorAll('.qcard').forEach(card=>{
+    const n=+card.dataset.q;
+    card.querySelectorAll('.option').forEach(b=>b.addEventListener('click',()=>answer(n,b.dataset.choice)));
+    card.querySelector('.retry').addEventListener('click',()=>retry(n));
+    card.querySelector('.next').addEventListener('click',()=>goNext(n));
+  });
+  document.querySelectorAll('.vocab-input').forEach(inp=>inp.addEventListener('input',()=>{state.vocab[inp.dataset.vocab]=inp.value;persist();}));
+}
+function answer(n,choice){
+  if(state.answers[n])return;
+  const q=QUESTIONS.find(x=>x.n===n),card=document.getElementById('q'+n),ok=choice===q.correct;
+  state.answers[n]={choice,correct:ok}; if(state.first[n]===undefined)state.first[n]=ok;
+  card.querySelectorAll('.option').forEach(b=>{b.disabled=true;const k=b.dataset.choice,t=b.querySelector('.state-tag');
+    if(k===q.correct){b.classList.add('correct');t.textContent=k===choice?'✓ Đúng':'✓ Đáp án đúng';}
+    else if(k===choice){b.classList.add('wrong');t.textContent='✕ Sai';}
+    else b.classList.add('strike');
+  });
+  const fb=card.querySelector('.feedback');fb.className='feedback '+(ok?'good':'bad');
+  fb.textContent=ok?'✓ Chính xác! Giỏi lắm, con cố lên!':'✕ Chưa chính xác! Đáp án đúng là '+q.correct+'.';
+  card.querySelector('.explain').classList.add('open');card.querySelector('.qactions').classList.add('show');
+  if(ok){ding();confetti(card);speak('Giỏi lắm, con cố lên!');}else{wrongTone();card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');speak('Ôi trời ơi, con đọc kỹ đáp án cho cô!');}
+  updateStats();persist();
+}
+function retry(n){
+  const card=document.getElementById('q'+n);delete state.answers[n];state.retries[n]=(state.retries[n]||0)+1;
+  card.querySelectorAll('.option').forEach(b=>{b.disabled=false;b.classList.remove('correct','wrong','strike');b.querySelector('.state-tag').textContent='';});
+  card.querySelector('.feedback').className='feedback';card.querySelector('.feedback').textContent='';
+  card.querySelector('.explain').classList.remove('open');card.querySelector('.qactions').classList.remove('show');
+  updateStats();persist();card.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function goNext(n){
+  const next=QUESTIONS.find(q=>q.n===n+1);if(!next)return submitBtn.scrollIntoView({behavior:'smooth'});
+  const cur=QUESTIONS.find(q=>q.n===n);if(next.section!==cur.section)activate(next.section);
+  setTimeout(()=>document.getElementById('q'+next.n).scrollIntoView({behavior:'smooth',block:'start'}),50);
+}
+function restore(){
+  for(const [n,a] of Object.entries(state.answers)){
+    const q=QUESTIONS.find(x=>x.n===+n),card=document.getElementById('q'+n);if(!q||!card)continue;
+    card.querySelectorAll('.option').forEach(b=>{b.disabled=true;const k=b.dataset.choice,t=b.querySelector('.state-tag');
+      if(k===q.correct){b.classList.add('correct');t.textContent=k===a.choice?'✓ Đúng':'✓ Đáp án đúng';}
+      else if(k===a.choice){b.classList.add('wrong');t.textContent='✕ Sai';}else b.classList.add('strike');
+    });
+    const fb=card.querySelector('.feedback');fb.className='feedback '+(a.correct?'good':'bad');fb.textContent=a.correct?'✓ Chính xác!':'✕ Chưa chính xác! Đáp án đúng là '+q.correct+'.';
+    card.querySelector('.explain').classList.add('open');card.querySelector('.qactions').classList.add('show');
+  }
+  studentName.value=state.name||'';studentClass.value=state.cls||'';updateStats();
+}
+function updateStats(){
+  const done=Object.keys(state.first).length,correct=Object.values(state.first).filter(Boolean).length,wrong=done-correct,rate=done?Math.round(correct/done*100):0;
+  sDone.textContent=done;sLeft.textContent=40-done;sCorrect.textContent=correct;sWrong.textContent=wrong;sRate.textContent=rate+'%';progress.style.width=(done/40*100)+'%';
+}
+function activate(sec){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById('sec'+sec).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',+t.dataset.sec===+sec));window.scrollTo({top:document.querySelector('.tabs').offsetTop-8,behavior:'smooth'})}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activate(t.dataset.sec)));
+function findFirst(fn){const q=QUESTIONS.find(fn);if(!q)return alert('Không có câu phù hợp.');activate(q.section);setTimeout(()=>document.getElementById('q'+q.n).scrollIntoView({behavior:'smooth',block:'center'}),80)}
+unfinishedBtn.addEventListener('click',()=>findFirst(q=>state.first[q.n]===undefined));
+wrongBtn.addEventListener('click',()=>findFirst(q=>state.first[q.n]===false));
+submitBtn.addEventListener('click',()=>{
+  const correct=Object.values(state.first).filter(Boolean).length,done=Object.keys(state.first).length,pct=Math.round(correct/40*100),score=(correct/40*10).toFixed(2).replace('.00','');
+  const msg=pct>=90?'Con làm rất tốt! Hãy tiếp tục phát huy nhé!':pct>=70?'Con làm khá tốt! Hãy xem lại một vài câu nhé!':pct>=50?'Con đã có cố gắng! Hãy đọc kỹ phần giải thích và làm lại nhé!':'Không sao đâu! Con hãy bình tĩnh xem lại kiến thức và thử thêm lần nữa nhé!';
+  submitBox.innerHTML=`<div class="scorebig">${score} / 10</div><p><b>${esc(state.name||'Học sinh')}</b>${state.cls?' • Lớp '+esc(state.cls):''}</p><p>Đã làm lần đầu: <b>${done}/40</b> • Đúng lần đầu: <b>${correct}</b> • Chưa làm: <b>${40-done}</b></p><p>${msg}</p><p class="note">Điểm giữ theo kết quả lần trả lời đầu tiên để sát cách làm bài trên giấy. Các lần “Làm lại câu này” chỉ phục vụ luyện tập.</p>`;
+  submitBox.classList.add('show');submitBox.scrollIntoView({behavior:'smooth'});
+});
+saveIdentity.addEventListener('click',()=>{state.name=studentName.value.trim();state.cls=studentClass.value.trim();persist();});
+studentName.addEventListener('change',()=>{state.name=studentName.value.trim();persist();});
+studentClass.addEventListener('change',()=>{state.cls=studentClass.value.trim();persist();});
+resetBtn.addEventListener('click',()=>{if(confirm('Làm lại toàn bộ? Kết quả hiện tại sẽ được xóa.')){state={answers:{},first:{},retries:{},name:studentName.value.trim(),cls:studentClass.value.trim(),vocab:state.vocab||{}};persist();render();activate(1);}});
+clearBtn.addEventListener('click',()=>{if(confirm('Xóa toàn bộ dữ liệu đã lưu trên trình duyệt?')){localStorage.removeItem(KEY);state={answers:{},first:{},retries:{},name:'',cls:'',vocab:{}};render();activate(1);}});
+soundBtn.addEventListener('click',()=>{soundOn=!soundOn;soundBtn.textContent=soundOn?'🔊 Âm thanh: Bật':'🔇 Âm thanh: Tắt';if(!soundOn&&'speechSynthesis'in window)speechSynthesis.cancel();persist();});
+function persist(){localStorage.setItem(KEY,JSON.stringify({...state,soundOn}));}
+function load(){
+  const raw=localStorage.getItem(KEY);if(raw){try{const old=JSON.parse(raw);if(confirm('Phát hiện bài đang làm dở. Con có muốn tiếp tục không?')){state={answers:old.answers||{},first:old.first||{},retries:old.retries||{},name:old.name||'',cls:old.cls||'',vocab:old.vocab||{}};soundOn=old.soundOn!==false;}else localStorage.removeItem(KEY);}catch(e){}}
+  soundBtn.textContent=soundOn?'🔊 Âm thanh: Bật':'🔇 Âm thanh: Tắt';
+}
+function speak(text){if(!soundOn||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='vi-VN';u.rate=.95;speechSynthesis.speak(u);}catch(e){}}
+function actx(){return new (window.AudioContext||window.webkitAudioContext)();}
+function ding(){if(!soundOn)return;try{const c=actx(),o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(660,c.currentTime);o.frequency.exponentialRampToValueAtTime(980,c.currentTime+.18);g.gain.setValueAtTime(.12,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.32);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.33);}catch(e){}}
+function wrongTone(){if(!soundOn)return;try{const c=actx();[0,1,2].forEach(i=>{const o=c.createOscillator(),g=c.createGain(),t=c.currentTime+i*.14;o.type='triangle';o.frequency.value=[440,330,220][i];g.gain.setValueAtTime(.1,t);g.gain.exponentialRampToValueAtTime(.001,t+.13);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.14);})}catch(e){}}
+function confetti(card){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=card.getBoundingClientRect(),x=r.left+r.width/2,y=Math.min(r.top+100,innerHeight-80),colors=['#c92532','#ef6a72','#ffd6d9','#5fb77d','#ffffff'];for(let i=0;i<34;i++){const e=document.createElement('i');e.className='confetti';e.style.left=x+'px';e.style.top=y+'px';e.style.background=colors[i%colors.length];e.style.setProperty('--dx',(Math.random()*420-210)+'px');e.style.setProperty('--dy',(Math.random()*300-180)+'px');document.body.appendChild(e);setTimeout(()=>e.remove(),950)}}
+load();render();
+</script>
+</body>
+</html>
